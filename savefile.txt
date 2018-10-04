@@ -1,0 +1,4 @@
+game_level: 1
+total_score: 0
+enemies_killed: 0
+lives_left: 0
