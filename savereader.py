@@ -1,9 +1,14 @@
-saveDict = {}
-
+# readSave() reads the save text file into a new dictionary and returns it
 def readSave():
-    with open("savefile.txt") as f:
+    save_dict = {}
+    with open(r"savefile.txt", 'r') as f:
+
         for line in f:
             (key, val) = line.split(':')
-            newDict[str(key)] = float(val)
+            save_dict[str(key)] = float(val)
 
-print(saveDict)
+    return save_dict
+
+
+# Test lines:
+#print(readSave())
