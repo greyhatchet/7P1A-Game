@@ -17,6 +17,17 @@ BLUE = (0, 0, 255)
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 700
 
+# Set the height and width of the screen
+size = [SCREEN_WIDTH, SCREEN_HEIGHT]
+screen = pygame.display.set_mode(size)
+
+def message_to_screen(msg,color,x_displace=0, y_displace =0):
+    nice_font = pygame.font.Font('freesansbold.ttf',24)
+    textSurface = nice_font.render(msg,True,color)
+    textSurf, textRect = textSurface, textSurface.get_rect()
+    textRect.center = (SCREEN_WIDTH/2) + x_displace, (SCREEN_HEIGHT/2) + y_displace
+    screen.blit(textSurf, textRect)
+
 global look_forward
 look_forward = True
 
@@ -276,9 +287,7 @@ class Level_02(Level):
 def main():
     pygame.init()
 
-    # Set the height and width of the screen
-    size = [SCREEN_WIDTH, SCREEN_HEIGHT]
-    screen = pygame.display.set_mode(size)
+    #
 
     pygame.display.set_caption("Space Game")
 
@@ -291,6 +300,8 @@ def main():
     level_list.append(Level_02(player))
 
     # Set the current level
+
+    # ***This information will hopefully come from a save state after the use of our start screen ***
     current_level_no = 0
     current_level = level_list[current_level_no]
 
@@ -349,7 +360,8 @@ def main():
             player.rect.left = 120
             current_level.shift_world(diff)
 
-        # If the player gets to the end of the level, go to the next level
+        # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
+        mScreen = False
         current_position = player.rect.x + current_level.world_shift
         if current_position < current_level.level_limit:
             player.rect.x = 120
@@ -357,6 +369,10 @@ def main():
                 current_level_no += 1
                 current_level = level_list[current_level_no]
                 player.level = current_level
+            else:
+                mScreen = True
+            
+
         '''
         print(current_level_no, 'Boo')
         print(current_position)
@@ -372,7 +388,10 @@ def main():
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
         current_level.draw(screen)
         active_sprite_list.draw(screen)
-
+        if mScreen:
+            message_to_screen("You win! Yuhhhhh", RED)
+        else:
+            message_to_screen("Level " + str((current_level_no + 1)),RED, -400 ,-300)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         # Limit to 60 frames per second
@@ -380,6 +399,7 @@ def main():
 
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
+
 
     pygame.quit()
 
