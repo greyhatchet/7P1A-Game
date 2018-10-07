@@ -1,5 +1,8 @@
 import pygame
 from savereader import *
+from savewriter import *
+from scorereader import *
+from scorewriter import *
 import time
 #load music
 
