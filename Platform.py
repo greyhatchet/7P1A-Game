@@ -1,5 +1,9 @@
 import pygame
 
+'''
+Code followed platformer tutorial from:
+http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
+'''
 # Global constants
 
 # Colors
@@ -9,27 +13,24 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
-# Screen dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+# Screen dimensions, DO NOT CHANGE FROM 1000 to 700
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 700
 
 global look_forward
 look_forward = True
 
 class Player(pygame.sprite.Sprite):
-    """
-    This class represents the bar at the bottom that the player controls.
-    """
 
-    # -- Methods
+    #This class represents the bar at the bottom that the player controls.
+
     def __init__(self):
-        """ Constructor function """
+        #Constructor function
 
         # Call the parent's constructor
         super().__init__()
 
         # Create an image of the block, and fill it with a color.
-        # This could also be an image loaded from the disk.
         width = 40
         height = 60
         self.image = pygame.Surface([width, height])
@@ -47,7 +48,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def update(self):
-        """ Move the player. """
+        # Move the player.
         # Gravity
         self.calc_grav()
 
@@ -82,7 +83,7 @@ class Player(pygame.sprite.Sprite):
             self.change_y = 0
 
     def calc_grav(self):
-        """ Calculate effect of gravity. """
+        #Calculate effect of gravity.
         if self.change_y == 0:
             self.change_y = 1
         else:
@@ -94,7 +95,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = SCREEN_HEIGHT - self.rect.height
 
     def jump(self):
-        """ Called when user hits 'jump' button. """
+        # Called when user hits the up arrow.
 
         # move down a bit and see if there is a platform below us.
         # Move down 2 pixels because it doesn't work well if we only move down 1
@@ -109,17 +110,17 @@ class Player(pygame.sprite.Sprite):
 
     # Player-controlled movement:
     def go_left(self):
-        """ Called when the user hits the left arrow. """
+        # Called when the user hits the left arrow.
         self.change_x = -6
         look_forward = False
 
     def go_right(self):
-        """ Called when the user hits the right arrow. """
+        # Called when the user hits the right arrow.
         self.change_x = 6
         look_forward = True
 
     def stop(self):
-        """ Called when the user lets off the keyboard. """
+        # Called when the user lets off the keyboard.
         self.change_x = 0
 
 
@@ -132,7 +133,6 @@ class Shoot(Player):
         super().__init__()
 
         # Create an image of the block, and fill it with a color.
-        # This could also be an image loaded from the disk.
         width = 2
         height = 5
         self.image = pygame.Surface([width, height])
@@ -149,19 +149,21 @@ class Shoot(Player):
         self.level = None
 
         def Fire(self):
-            """Called when user hits the A key."""
+            # Called when user hits the A key.
             if look_forward == True:
+                x = False # PLACEHOLDER
 
 
 
 
 class Platform(pygame.sprite.Sprite):
-    """ Platform the user can jump on """
+    # Platform the user can jump on
 
     def __init__(self, width, height):
-        """ Platform constructor. Assumes constructed with user passing in
-            an array of 5 numbers like what's defined at the top of this code.
-            """
+        """
+        Platform constructor. Assumes constructed with user passing in
+        an array of 5 numbers like what's defined at the top of this code.
+        """
         super().__init__()
 
         self.image = pygame.Surface([width, height])
@@ -171,13 +173,12 @@ class Platform(pygame.sprite.Sprite):
 
 
 class Level():
-    """ This is a generic super-class used to define a level.
-        Create a child class for each level with level-specific
-        info. """
+
 
     def __init__(self, player):
-        """ Constructor. Pass in a handle to player. Needed for when moving
-            platforms collide with the player. """
+
+        # Constructor.
+
         self.platform_list = pygame.sprite.Group()
         self.enemy_list = pygame.sprite.Group()
         self.player = player
@@ -187,12 +188,12 @@ class Level():
 
     # Update everythign on this level
     def update(self):
-        """ Update everything in this level."""
+        # Update everything in this level.
         self.platform_list.update()
         self.enemy_list.update()
 
     def draw(self, screen):
-        """ Draw everything on this level. """
+        # Draw everything on this level.
 
         # Draw the background
         screen.fill(BLUE)
@@ -202,8 +203,6 @@ class Level():
         self.enemy_list.draw(screen)
 
     def shift_world(self, shift_x):
-        """ When the user moves left/right and we need to scroll
-        everything: """
 
         # Keep track of the shift amount
         self.world_shift += shift_x
@@ -218,10 +217,10 @@ class Level():
 
 # Create platforms for the level
 class Level_01(Level):
-    """ Definition for level 1. """
+    # Definition for level 1.
 
     def __init__(self, player):
-        """ Create level 1. """
+        # Create level 1.
 
         # Call the parent constructor
         Level.__init__(self, player)
@@ -230,10 +229,10 @@ class Level_01(Level):
         self.level_limit_back = 200
 
         # Array with width, height, x, and y of platform
-        level = [[210, 70, 500, 500],
-                 [210, 70, 800, 400],
-                 [210, 70, 1000, 500],
-                 [210, 70, 1120, 280],
+        level = [[210, 70, 500, 600],
+                 [210, 70, 800, 500],
+                 [210, 70, 1000, 600],
+                 [210, 70, 1120, 380],
                  ]
 
         # Go through the array above and add platforms
@@ -247,10 +246,10 @@ class Level_01(Level):
 
 # Create platforms for the level
 class Level_02(Level):
-    """ Definition for level 2. """
+    # Definition for level 2.
 
     def __init__(self, player):
-        """ Create level 2. """
+        # Create level 2.
 
         # Call the parent constructor
         Level.__init__(self, player)
@@ -275,14 +274,13 @@ class Level_02(Level):
 
 
 def main():
-    """ Main Program """
     pygame.init()
 
     # Set the height and width of the screen
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
     screen = pygame.display.set_mode(size)
 
-    pygame.display.set_caption("Side-scrolling Platformer")
+    pygame.display.set_caption("Space Game")
 
     # Create the player
     player = Player()
@@ -360,7 +358,7 @@ def main():
                 current_level = level_list[current_level_no]
                 player.level = current_level
         '''
-        print(current_level_no, 'FUCK')
+        print(current_level_no, 'Boo')
         print(current_position)
         if current_position > current_level.level_limit_back and current_level_no != 0:
             player.rect.x = 120
