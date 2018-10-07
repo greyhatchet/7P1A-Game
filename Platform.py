@@ -1,39 +1,28 @@
 import pygame
+import pygame
 from savereader import *
 from savewriter import *
 from scorereader import *
 from scorewriter import *
 import time
-#load music
 
-
+# load music
 
 pygame.init()
-
-    #
 
 pygame.display.set_caption("Space Game")
 pygame.mixer.music.load('menuMusic.mp3')
 
-#load background
+# load background
 mBackg = pygame.image.load('starsBG.png')
-mBackg = pygame.transform.scale(mBackg, (1000,700))
+mBackg = pygame.transform.scale(mBackg, (1000, 700))
 
-gDisplay = pygame.display.set_mode((1000,700))
-
+gDisplay = pygame.display.set_mode((1000, 700))
 
 clock = pygame.time.Clock()
 
-#gameOn = True
 
-# Global constants
-current_level_no = 1
-total_score = 0.0
-lives_left = 0
-enemies_killed = 0
-save_info = {}
-
-# Reading and writing saves
+# gameOn = True
 def readSaveFile():
     save_info = readSave()
 
@@ -43,6 +32,7 @@ def readSaveFile():
     enemies_killed = int(save_info["enemies_killed"])
     print(save_info)
 
+
 def updateSaveInfo():
     save_info["game_level"] = current_level_no
     save_info["lives_left"] = lives_left
@@ -50,40 +40,34 @@ def updateSaveInfo():
     save_info["enemies_killed"] = enemies_killed
 
 def text_maker(text, font_a):
-    surf = font_a.render(text, True, (255,255,255))
+    surf = font_a.render(text, True, (255, 255, 255))
     return surf, surf.get_rect()
 
-def menu_dis ():
+
+def menu_dis():
     text1 = 'Shape Wars: A Space Odyssey'
-    text2 = 'Press ENTER to start'
-    text3 = 'Press SPACE to start from save file'
-    font_a =  pygame.font.Font('freesansbold.ttf', 50)
+    text2 = 'Press ENTER to Start'
+    font_a = pygame.font.Font('freesansbold.ttf', 50)
     tSurf1, tRec1 = text_maker(text1, font_a)
     tRec1.center = (500, 200)
     tSurf2, tRec2 = text_maker(text2, font_a)
     tRec2.center = (500, 300)
-    tSurf3, tRec3 = text_maker(text3, font_a)
-    tRec3.center = (500, 400)
     gDisplay.blit(tSurf1, tRec1)
     gDisplay.blit(tSurf2, tRec2)
-    gDisplay.blit(tSurf3, tRec3)
     pygame.display.update()
 
 
 def startMenu():
-
-
-    #display bkg
-    gDisplay.blit(mBackg, (0,0))
-    #play music
+    # display bkg
+    gDisplay.blit(mBackg, (0, 0))
+    # play music
     pygame.mixer.music.play(-1)
 
     pygame.display.update()
 
-    #display menu
+    # display menu
     menu_dis()
     pygame.display.update()
-
 
     clock.tick(60)
     start = True
@@ -97,30 +81,8 @@ def startMenu():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     gameLoop()
-                elif event.key == pygame.K_SPACE:
-                    readSaveFile()
-                    gameLoop()
-                    
 
     pygame.display.update()
-
-
-#while gameOn:
-
-    #for event in pygame.event.get():
-
-        #if event.type == pygame.QUIT:
-            #gameOn = False
-
-
-
-
-    #pygame.display.update()
-
-    #clock.tick(60)
-
-
-#quit()
 
 
 '''
@@ -144,22 +106,25 @@ SCREEN_HEIGHT = 700
 size = [SCREEN_WIDTH, SCREEN_HEIGHT]
 screen = pygame.display.set_mode(size)
 
-def message_to_screen(msg,color,x_displace=0, y_displace =0):
-    nice_font = pygame.font.Font('freesansbold.ttf',24)
-    textSurface = nice_font.render(msg,True,color)
+
+def message_to_screen(msg, color, x_displace=0, y_displace=0, font_size=0):
+    nice_font = pygame.font.Font('freesansbold.ttf', font_size)
+    textSurface = nice_font.render(msg, True, color)
     textSurf, textRect = textSurface, textSurface.get_rect()
-    textRect.center = (SCREEN_WIDTH/2) + x_displace, (SCREEN_HEIGHT/2) + y_displace
+    textRect.center = (SCREEN_WIDTH / 2) + x_displace, (SCREEN_HEIGHT / 2) + y_displace
     screen.blit(textSurf, textRect)
+
 
 global look_forward
 look_forward = True
 
+
 class Player(pygame.sprite.Sprite):
 
-    #This class represents the bar at the bottom that the player controls.
+    # This class represents the bar at the bottom that the player controls.
 
     def __init__(self):
-        #Constructor function
+        # Constructor function
 
         # Call the parent's constructor
         super().__init__()
@@ -179,7 +144,6 @@ class Player(pygame.sprite.Sprite):
 
         # List of sprites we can bump against
         self.level = None
-
 
     def update(self):
         # Move the player.
@@ -217,7 +181,7 @@ class Player(pygame.sprite.Sprite):
             self.change_y = 0
 
     def calc_grav(self):
-        #Calculate effect of gravity.
+        # Calculate effect of gravity.
         if self.change_y == 0:
             self.change_y = 1
         else:
@@ -258,12 +222,9 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
 
 
-
-
 class Shoot(Player):
 
     def __init__(self):
-
         super().__init__()
 
         # Create an image of the block, and fill it with a color.
@@ -285,9 +246,7 @@ class Shoot(Player):
         def Fire(self):
             # Called when user hits the A key.
             if look_forward == True:
-                x = False # PLACEHOLDER
-
-
+                x = False  # PLACEHOLDER
 
 
 class Platform(pygame.sprite.Sprite):
@@ -307,7 +266,6 @@ class Platform(pygame.sprite.Sprite):
 
 
 class Level():
-
 
     def __init__(self, player):
 
@@ -364,19 +322,19 @@ class Level_01(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-                 [100, 30, 400, 670],
-                 [320, 30, 0, 670],
-                 [70, 70, 500, 650],  #
-                 [70, 70, 700, 550],  #
-                 [70, 70, 750, 550],  #
+            [100, 30, 400, 670],
+            [320, 30, 0, 670],
+            [70, 70, 500, 650],  #
+            [70, 70, 700, 550],  #
+            [70, 70, 750, 550],  #
 
-                 [210, 70, 500, 600],  #
-                 [210, 70, 800, 500],  #
-                 [70, 70, 1000, 550],  #
-                 [210, 70, 1000, 600], #
-                 [210, 70, 1120, 380], #
-                 [1500, 30, 1210, 670],# #bottom
-                 ]
+            [210, 70, 500, 600],  #
+            [210, 70, 800, 500],  #
+            [70, 70, 1000, 550],  #
+            [210, 70, 1000, 600],  #
+            [210, 70, 1120, 380],  #
+            [1500, 30, 1210, 670],  # #bottom
+        ]
 
         # Go through the array above and add platforms
         for platform in level:
@@ -415,14 +373,8 @@ class Level_02(Level):
             block.player = self.player
             self.platform_list.add(block)
 
+
 def gameLoop():
-
-    global current_level_no
-    global total_score
-    global lives_left
-    global enemies_killed
-    global save_info
-
     # Create the player
     player = Player()
 
@@ -449,21 +401,21 @@ def gameLoop():
     done = False
     # Used to manage how fast the screen updates
     clock = pygame.time.Clock()
-
+    mScreen = False
     # -------- Main Program Loop -----------
     while not done:
-        #boolean to restart current level
+        # boolean to restart current level
         restart_level = False
-
+        if mScreen:
+            player.jump()
         for event in pygame.event.get():
 
-            #if window closed, quit
+            # if window closed, quit
             if event.type == pygame.QUIT:
                 done = True
 
-            
             # interpret event of keys being pressed
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN and mScreen == False:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     player.go_left()
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -471,15 +423,23 @@ def gameLoop():
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     player.jump()
                 if event.key == pygame.K_SPACE:
-                    shoot =  Shoot()
+                    shoot = Shoot()
                     shoot.rect.x
                     shoot.fire()
                 if event.key == pygame.K_r:
                     restart_level = True
 
-            #interpret event of keys being released
+            # if at end game screen, press q to quit and r to restart level
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    done = True
+                if event.key == pygame.K_r:
+                    restart_level = True
+                    mScreen = False
+
+            # interpret event of keys being released
             if event.type == pygame.KEYUP:
-                if  (event.key == pygame.K_LEFT or event.key == pygame.K_a) and player.change_x < 0:
+                if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and player.change_x < 0:
                     player.stop()
                 if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and player.change_x > 0:
                     player.stop()
@@ -494,7 +454,7 @@ def gameLoop():
         if player.rect.right >= 500:
             diff = player.rect.right - 500
             player.rect.right = 500
-            position_scroll+= diff
+            position_scroll += diff
             current_level.shift_world(-diff)
 
         # If the player gets near the left side, shift the world right (+x)
@@ -511,9 +471,7 @@ def gameLoop():
                 position_scroll = 0
                 player.rect.x = 120
 
-
         # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
-        mScreen = False
         current_position = player.rect.x + current_level.world_shift
         if current_position < current_level.level_limit:
             if current_level_no < len(level_list) - 1:
@@ -524,7 +482,6 @@ def gameLoop():
                 position_scroll = 0
             else:
                 mScreen = True
-            
 
         '''
         print(current_level_no, 'Boo')
@@ -542,10 +499,12 @@ def gameLoop():
         current_level.draw(screen)
         active_sprite_list.draw(screen)
         if mScreen:
-            message_to_screen("You win! Yuhhhhh", RED)
+            message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
+            message_to_screen('To quit: press q', BLACK, 0, -30, 16)
+            message_to_screen('To restart level: press r', BLACK, 0, -15, 16)
             pygame.mixer.music.stop()
         else:
-            message_to_screen("Level " + str((current_level_no)),RED, -400 ,-300)
+            message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         # Limit to 60 frames per second
@@ -554,13 +513,8 @@ def gameLoop():
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
 
-
     pygame.quit()
+    quit()
 
 
 startMenu()
-
-
-
-
-
