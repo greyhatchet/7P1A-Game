@@ -14,7 +14,12 @@ def writeScores(scores):
                 new_str = ':'
                 f.write(new_str + '\n')
 
+'''
+Need to sort the file by the scores to display the top 3 scores
+'''
 
 # Test lines:
-new_scores = [('ASD', 202), ('asdsa', 2312)]
+new_scores = [('a', 1), ('z', 2), ('c', 12), ('x', 4), ('e', 5), ('f', 6),
+              ('g', 7), ('h', 8), ('i', 9), ('j', 10), ('k', 11), ('l', 12)]
+
 writeScores(new_scores)
