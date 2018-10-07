@@ -326,13 +326,13 @@ def main():
                 done = True
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     player.go_left()
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     player.go_right()
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP or event.key == pygame.K_w:
                     player.jump()
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_SPACE:
                     shoot =  Shoot()
                     shoot.rect.x
                     shoot.fire()
@@ -340,9 +340,9 @@ def main():
                     restart_level = True
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT and player.change_x < 0:
+                if  (event.key == pygame.K_LEFT or event.key == pygame.K_a) and player.change_x < 0:
                     player.stop()
-                if event.key == pygame.K_RIGHT and player.change_x > 0:
+                if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and player.change_x > 0:
                     player.stop()
 
         # Update the player.
