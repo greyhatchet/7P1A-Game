@@ -1,6 +1,9 @@
 import pygame
+from savereader import *
 import time
 #load music
+
+
 
 pygame.init()
 
@@ -20,20 +23,47 @@ clock = pygame.time.Clock()
 
 #gameOn = True
 
+# Global constants
+current_level_no = 1
+total_score = 0.0
+lives_left = 0
+enemies_killed = 0
+save_info = {}
+
+# Reading and writing saves
+def readSaveFile():
+    save_info = readSave()
+
+    current_level_no = int(save_info["game_level"])
+    lives_left = int(save_info["lives_left"])
+    total_score = save_info["total_score"]
+    enemies_killed = int(save_info["enemies_killed"])
+    print(save_info)
+
+def updateSaveInfo():
+    save_info["game_level"] = current_level_no
+    save_info["lives_left"] = lives_left
+    save_info["total_score"] = total_score
+    save_info["enemies_killed"] = enemies_killed
+
 def text_maker(text, font_a):
     surf = font_a.render(text, True, (255,255,255))
     return surf, surf.get_rect()
 
 def menu_dis ():
     text1 = 'Shape Wars: A Space Odyssey'
-    text2 = 'Press ENTER to Start'
+    text2 = 'Press ENTER to start'
+    text3 = 'Press SPACE to start from save file'
     font_a =  pygame.font.Font('freesansbold.ttf', 50)
     tSurf1, tRec1 = text_maker(text1, font_a)
     tRec1.center = (500, 200)
     tSurf2, tRec2 = text_maker(text2, font_a)
     tRec2.center = (500, 300)
+    tSurf3, tRec3 = text_maker(text3, font_a)
+    tRec3.center = (500, 400)
     gDisplay.blit(tSurf1, tRec1)
     gDisplay.blit(tSurf2, tRec2)
+    gDisplay.blit(tSurf3, tRec3)
     pygame.display.update()
 
 
@@ -63,6 +93,9 @@ def startMenu():
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    gameLoop()
+                elif event.key == pygame.K_SPACE:
+                    readSaveFile()
                     gameLoop()
                     
 
@@ -371,6 +404,13 @@ class Level_02(Level):
             self.platform_list.add(block)
 
 def gameLoop():
+
+    global current_level_no
+    global total_score
+    global lives_left
+    global enemies_killed
+    global save_info
+
     # Create the player
     player = Player()
 
