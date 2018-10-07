@@ -15,7 +15,6 @@ mBackg = pygame.transform.scale(mBackg, (1000,700))
 
 gDisplay = pygame.display.set_mode((1000,700))
 
-pygame.display.set_caption('Main Menu')
 
 clock = pygame.time.Clock()
 
