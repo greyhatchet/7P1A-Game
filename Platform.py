@@ -485,6 +485,7 @@ def gameLoop():
             pygame.mixer.music.stop()
         else:
             message_to_screen("Level " + str((current_level_no)),RED, -400 ,-300,24)
+            message_to_screen("If stuck, press r to restart level",RED, -307, -275, 18)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         # Limit to 60 frames per second
