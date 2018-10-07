@@ -21,6 +21,12 @@ gDisplay = pygame.display.set_mode((1000, 700))
 
 clock = pygame.time.Clock()
 
+# Global constants
+current_level_no = 1
+total_score = 0.0
+lives_left = 0
+enemies_killed = 0
+save_info = {}
 
 # gameOn = True
 def readSaveFile():
@@ -47,6 +53,7 @@ def text_maker(text, font_a):
 def menu_dis():
     text1 = 'Shape Wars: A Space Odyssey'
     text2 = 'Press ENTER to Start'
+    text3 = 'Press SPACE to start from save file'
     font_a = pygame.font.Font('freesansbold.ttf', 50)
     tSurf1, tRec1 = text_maker(text1, font_a)
     tRec1.center = (500, 200)
@@ -80,6 +87,9 @@ def startMenu():
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    gameLoop()
+                elif event.key == pygame.K_SPACE:
+                    readSaveFile()
                     gameLoop()
 
     pygame.display.update()
