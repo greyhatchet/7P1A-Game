@@ -1,10 +1,16 @@
 import pygame
+from savereader import *
 
 '''
 Code followed platformer tutorial from:
 http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
 '''
 # Global constants
+current_level_no = 1
+total_score = 0
+lives_left = 3
+enemies_killed = 0
+save_info = {}
 
 # Colors
 BLACK = (0, 0, 0)
@@ -302,7 +308,6 @@ def main():
     # Set the current level
 
     # ***This information will hopefully come from a save state after the use of our start screen ***
-    current_level_no = 0
     current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
@@ -419,3 +424,21 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Reading and writing saves
+def readSaveFile() {
+
+    save_info = readSave()
+
+    current_level_no = save_info["game_level"]
+    lives_left = save_info["lives_left"]
+    total_score = save_info["total_score"]
+    enemies_killed = save_info["enemies_killed"]
+
+}
+
+def writeSaveFile() {
+
+    writeSaveFile(save_info)
+
+}
