@@ -1,16 +1,98 @@
 import pygame
-from savereader import *
+import time
+#load music
+
+pygame.init()
+
+    #
+
+pygame.display.set_caption("Space Game")
+pygame.mixer.music.load('menuMusic.mp3')
+
+#load background
+mBackg = pygame.image.load('starsBG.png')
+mBackg = pygame.transform.scale(mBackg, (1000,700))
+
+gDisplay = pygame.display.set_mode((1000,700))
+
+pygame.display.set_caption('Main Menu')
+
+clock = pygame.time.Clock()
+
+#gameOn = True
+
+def text_maker(text, font_a):
+    surf = font_a.render(text, True, (255,255,255))
+    return surf, surf.get_rect()
+
+def menu_dis ():
+    text1 = 'Shape Wars: A Space Odyssey'
+    text2 = 'Press ENTER to Start'
+    font_a =  pygame.font.Font('freesansbold.ttf', 50)
+    tSurf1, tRec1 = text_maker(text1, font_a)
+    tRec1.center = (500, 200)
+    tSurf2, tRec2 = text_maker(text2, font_a)
+    tRec2.center = (500, 300)
+    gDisplay.blit(tSurf1, tRec1)
+    gDisplay.blit(tSurf2, tRec2)
+    pygame.display.update()
+
+
+def startMenu():
+
+
+    #display bkg
+    gDisplay.blit(mBackg, (0,0))
+    #play music
+    pygame.mixer.music.play(-1)
+
+    pygame.display.update()
+
+    #display menu
+    menu_dis()
+    pygame.display.update()
+
+
+    clock.tick(60)
+    start = True
+
+    while start:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.mixer.music.stop()
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    gameLoop()
+                    
+
+    pygame.display.update()
+
+
+#while gameOn:
+
+    #for event in pygame.event.get():
+
+        #if event.type == pygame.QUIT:
+            #gameOn = False
+
+
+
+
+    #pygame.display.update()
+
+    #clock.tick(60)
+
+
+#quit()
+
 
 '''
 Code followed platformer tutorial from:
 http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
 '''
 # Global constants
-current_level_no = 1
-total_score = 0
-lives_left = 3
-enemies_killed = 0
-save_info = {}
 
 # Colors
 BLACK = (0, 0, 0)
@@ -289,14 +371,7 @@ class Level_02(Level):
             block.player = self.player
             self.platform_list.add(block)
 
-
-def main():
-    pygame.init()
-
-    #
-
-    pygame.display.set_caption("Space Game")
-
+def gameLoop():
     # Create the player
     player = Player()
 
@@ -308,6 +383,7 @@ def main():
     # Set the current level
 
     # ***This information will hopefully come from a save state after the use of our start screen ***
+    current_level_no = 0
     current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
@@ -325,11 +401,17 @@ def main():
 
     # -------- Main Program Loop -----------
     while not done:
+        #boolean to restart current level
         restart_level = False
+
         for event in pygame.event.get():
+
+            #if window closed, quit
             if event.type == pygame.QUIT:
                 done = True
 
+            
+            # interpret event of keys being pressed
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     player.go_left()
@@ -344,6 +426,7 @@ def main():
                 if event.key == pygame.K_r:
                     restart_level = True
 
+            #interpret event of keys being released
             if event.type == pygame.KEYUP:
                 if  (event.key == pygame.K_LEFT or event.key == pygame.K_a) and player.change_x < 0:
                     player.stop()
@@ -370,6 +453,7 @@ def main():
             position_scroll -= diff
             current_level.shift_world(diff)
 
+        # if r is pressed, return block to initial level position
         if restart_level == True:
             if position_scroll != 0:
                 current_level.shift_world(position_scroll)
@@ -408,8 +492,9 @@ def main():
         active_sprite_list.draw(screen)
         if mScreen:
             message_to_screen("You win! Yuhhhhh", RED)
+            pygame.mixer.music.stop()
         else:
-            message_to_screen("Level " + str((current_level_no + 1)),RED, -400 ,-300)
+            message_to_screen("Level " + str((current_level_no)),RED, -400 ,-300)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         # Limit to 60 frames per second
@@ -422,23 +507,9 @@ def main():
     pygame.quit()
 
 
-if __name__ == "__main__":
-    main()
+startMenu()
 
-# Reading and writing saves
-def readSaveFile() {
 
-    save_info = readSave()
 
-    current_level_no = save_info["game_level"]
-    lives_left = save_info["lives_left"]
-    total_score = save_info["total_score"]
-    enemies_killed = save_info["enemies_killed"]
 
-}
 
-def writeSaveFile() {
-
-    writeSaveFile(save_info)
-
-}
