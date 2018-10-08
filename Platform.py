@@ -27,16 +27,29 @@ total_score = 0.0
 lives_left = 0
 enemies_killed = 0
 save_info = {}
+save_num = 0
 
 # gameOn = True
-def readSaveFile():
-    save_info = readSave()
 
-    current_level_no = int(save_info["game_level"])
-    lives_left = int(save_info["lives_left"])
-    total_score = save_info["total_score"]
-    enemies_killed = int(save_info["enemies_killed"])
-    print(save_info)
+# Read and writing saves
+# Default dict is used to handle possible errors raised by readSave(), which will cause it to return an empty dictionary
+def readSaveFile(save_num):
+    save_info = readSave(save_num)
+    default_dict = {'game_level': 0, 'lives_left': 3, 'total_score': 0.0, 'enemies_killed': 0}
+
+    try:
+        current_level_no = int(save_info["game_level"])
+        lives_left = int(save_info["lives_left"])
+        total_score = save_info["total_score"]
+        enemies_killed = int(save_info["enemies_killed"])
+
+    except(KeyError):
+        save_info = default_dict
+
+        current_level_no = int(save_info["game_level"])
+        lives_left = int(save_info["lives_left"])
+        total_score = save_info["total_score"]
+        enemies_killed = int(save_info["enemies_killed"])
 
 
 def updateSaveInfo():
@@ -91,7 +104,7 @@ def startMenu():
                 if event.key == pygame.K_RETURN:
                     gameLoop()
                 elif event.key == pygame.K_SPACE:
-                    readSaveFile()
+                    readSaveFile(save_num)
                     gameLoop()
 
     pygame.display.update()
@@ -255,10 +268,10 @@ class Shoot(Player):
         # List of sprites we can bump against
         self.level = None
 
-        def Fire(self):
-            # Called when user hits the A key.
-            if look_forward == True:
-                x = False  # PLACEHOLDER
+    def Fire(self):
+        # Called when user hits the A key.
+        if look_forward == True:
+            x = False  # PLACEHOLDER
 
 
 class Platform(pygame.sprite.Sprite):
@@ -437,7 +450,7 @@ def gameLoop():
                 if event.key == pygame.K_SPACE:
                     shoot = Shoot()
                     shoot.rect.x
-                    shoot.fire()
+                    shoot.Fire()
                 if event.key == pygame.K_r:
                     restart_level = True
 
