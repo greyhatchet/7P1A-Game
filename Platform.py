@@ -52,17 +52,19 @@ def text_maker(text, font_a):
 
 def menu_dis():
     text1 = 'Shape Wars: A Space Odyssey'
-    text2 = 'Press ENTER to Start'
+    text2 = 'Press ENTER to start'
     text3 = 'Press SPACE to start from save file'
     font_a = pygame.font.Font('freesansbold.ttf', 50)
     tSurf1, tRec1 = text_maker(text1, font_a)
     tRec1.center = (500, 200)
     tSurf2, tRec2 = text_maker(text2, font_a)
     tRec2.center = (500, 300)
+    tSurf3, tRec3 = text_maker(text3, font_a)
+    tRec3.center = (500, 400)
     gDisplay.blit(tSurf1, tRec1)
     gDisplay.blit(tSurf2, tRec2)
+    gDisplay.blit(tSurf3, tRec3)
     pygame.display.update()
-
 
 def startMenu():
     # display bkg
@@ -515,6 +517,7 @@ def gameLoop():
             pygame.mixer.music.stop()
         else:
             message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
+            message_to_screen("If stuck, press r to restart level",RED,-307,-275,18)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         # Limit to 60 frames per second
