@@ -1,12 +1,29 @@
 # writeSave takes a dictionary where the keys are the relevant data (e.g. game level) with their respective values:
-def writeSave(save_dict):
-    with open(r"savefile.txt", 'w+') as f:
+# Added boolean returns to facilitate unit testing
+save_files = ['savefile1.txt', 'savefile2.txt', 'savefile3.txt']
 
-        for key in save_dict:
-            new_str = key + ': ' + str(save_dict[key])
-            f.write(new_str + '\n')
+def writeSave(save_dict, save_num):
+    try:
+        with open(save_files[save_num], 'w+') as f:
+
+            if len(save_dict) == 0:
+                raise(TypeError)
+
+            for key in save_dict:
+                new_str = key + ': ' + str(save_dict[key])
+                f.write(new_str + '\n')
+
+        return True
+
+    except(IndexError):
+        print('Save file not found!')
+        return False
+
+    except(TypeError):
+        print('Invalid/incorrect number of inputs')
+        return False
 
 
 # Test lines:
-new_save = {'game_level': 91, 'total_score': 9, 'enemies_killed': 80, 'lives_left': 100}
-writeSave(new_save)
+# new_save = {'game_level': 91, 'total_score': 9, 'enemies_killed': 80, 'lives_left': 100}
+# writeSave(new_save)
