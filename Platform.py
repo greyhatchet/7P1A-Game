@@ -45,7 +45,7 @@ total_score = 0.0
 lives_left = 0
 enemies_killed = 0
 save_info = {}
-save_num = 0
+save_num = 1
 
 # gameOn = True
 
@@ -487,7 +487,11 @@ def gameLoop():
 
     # Set the current level
     global current_level_no
-    current_level = level_list[current_level_no]
+    try:
+        current_level = level_list[current_level_no]
+    except(IndexError):
+        current_level_no = 0
+        current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
     player.level = current_level
