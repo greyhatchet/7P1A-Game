@@ -329,11 +329,6 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
 
 
-class Shoot(Player):
-
-    def __init__(self):
-        super().__init__()
-
         # Create an image of the block, and fill it with a color.
         width = 2
         height = 5
@@ -354,6 +349,12 @@ class Shoot(Player):
         # Called when user hits the A key.
         if look_forward == True:
             x = False  # PLACEHOLDER
+
+        block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        for block in block_hit_list:
+            # If we are moving right,
+            # set our right side to the left side of the item we hit
+            self.kill()
 
 
 class Platform(pygame.sprite.Sprite):
