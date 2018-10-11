@@ -349,9 +349,10 @@ class Bullet(pg.sprite.Sprite):
         self.rect.center = self.pos  # Update the rect pos.
         if self.rect.right <= 0 or self.rect.left<=-20:
             self.kill()
+            
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
-            self.kill
+            self.kill()
             
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
