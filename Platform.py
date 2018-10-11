@@ -6,8 +6,11 @@ from scorereader import *
 from scorewriter import *
 import time
 
+'''
+Code followed platformer tutorial from:
+http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
+'''
 # load music
-
 pygame.init()
 
 pygame.display.set_caption("Space Game")
@@ -21,13 +24,28 @@ gDisplay = pygame.display.set_mode((1000, 700))
 
 clock = pygame.time.Clock()
 
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+
+# Screen dimensions, DO NOT CHANGE FROM 1000 to 700
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 700
+
+# Set the height and width of the screen
+size = [SCREEN_WIDTH, SCREEN_HEIGHT]
+screen = pygame.display.set_mode(size)
+
 # Global constants
-current_level_no = 1
+current_level_no = 0
 total_score = 0.0
 lives_left = 0
 enemies_killed = 0
 save_info = {}
-save_num = 0
+save_num = 1
 
 # gameOn = True
 
@@ -36,6 +54,10 @@ save_num = 0
 def readSaveFile(save_num):
     save_info = readSave(save_num)
     default_dict = {'game_level': 0, 'lives_left': 3, 'total_score': 0.0, 'enemies_killed': 0}
+    global current_level_no
+    global lives_left
+    global total_score
+    global enemies_killed
 
     try:
         current_level_no = int(save_info["game_level"])
@@ -108,28 +130,6 @@ def startMenu():
                     gameLoop()
 
     pygame.display.update()
-
-
-'''
-Code followed platformer tutorial from:
-http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
-'''
-# Global constants
-
-# Colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-
-# Screen dimensions, DO NOT CHANGE FROM 1000 to 700
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 700
-
-# Set the height and width of the screen
-size = [SCREEN_WIDTH, SCREEN_HEIGHT]
-screen = pygame.display.set_mode(size)
 
 
 def message_to_screen(msg, color, x_displace=0, y_displace=0, font_size=0):
@@ -424,8 +424,7 @@ class Level_01(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [100, 30, 400, 670],
-            [320, 30, 0, 670],
+            [500, 30, 0, 670],
             [70, 70, 500, 650],  #
             [70, 70, 700, 550],  #
             [70, 70, 750, 550],  #
@@ -486,17 +485,19 @@ def gameLoop():
     level_list.append(Level_02(player))
 
     # Set the current level
-
-    # ***This information will hopefully come from a save state after the use of our start screen ***
-    current_level_no = 0
-    current_level = level_list[current_level_no]
+    global current_level_no
+    try:
+        current_level = level_list[current_level_no]
+    except(IndexError):
+        current_level_no = 0
+        current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
     player.level = current_level
 
     player.rect.x = 340
     position_scroll = 0
-    player.rect.y = SCREEN_HEIGHT - player.rect.height
+    player.rect.y = 500 #SCREEN_HEIGHT - player.rect.height
     active_sprite_list.add(player)
 
     # Loop until the user clicks the close button.
