@@ -248,19 +248,6 @@ class Player(pygame.sprite.Sprite):
         # Called when the user lets off the keyboard.
         self.change_x = 0
 
-    def Fire(self):
-        # Called when user hits the A key.
-        if look_forward == True:
-            shoot = Shoot()
-            shoot.rect.x = self.rect.x
-            shoot.rect.y = self.rect.y
-
-
-        if look_forward == False:
-            shoot = Shoot()
-            shoot.change_x = -30
-            shoot.rect.x = self.rect.x
-            shoot.rect.y = self.rect.y
 
 
 class Bullet(pg.sprite.Sprite):
@@ -288,7 +275,7 @@ class Bullet(pg.sprite.Sprite):
             # If we are moving right,
             # set our right side to the left side of the item we hit
             self.kill()
- 
+
 
 class Platform(pygame.sprite.Sprite):
     # Platform the user can jump on
