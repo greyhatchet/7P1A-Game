@@ -523,6 +523,9 @@ class Level_02(Level):
         enemy_1 = Enemy()
         enemy_1.setPosition(825, 300)
         self.enemy_list.add(enemy_1)
+        enemy_2 = Enemy()
+        enemy_2.setPosition(700, 600)
+        self.enemy_list.add(enemy_2)
 
         # Array with type of platform, and x, y location of the platform.
         level = [
