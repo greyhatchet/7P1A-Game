@@ -6,8 +6,11 @@ from scorereader import *
 from scorewriter import *
 import time
 
+'''
+Code followed platformer tutorial from:
+http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
+'''
 # load music
-
 pygame.init()
 
 pygame.display.set_caption("Space Game")
@@ -20,6 +23,21 @@ mBackg = pygame.transform.scale(mBackg, (1000, 700))
 gDisplay = pygame.display.set_mode((1000, 700))
 
 clock = pygame.time.Clock()
+
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+
+# Screen dimensions, DO NOT CHANGE FROM 1000 to 700
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 700
+
+# Set the height and width of the screen
+size = [SCREEN_WIDTH, SCREEN_HEIGHT]
+screen = pygame.display.set_mode(size)
 
 # Global constants
 current_level_no = 1
@@ -112,28 +130,6 @@ def startMenu():
                     gameLoop()
 
     pygame.display.update()
-
-
-'''
-Code followed platformer tutorial from:
-http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
-'''
-# Global constants
-
-# Colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-
-# Screen dimensions, DO NOT CHANGE FROM 1000 to 700
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 700
-
-# Set the height and width of the screen
-size = [SCREEN_WIDTH, SCREEN_HEIGHT]
-screen = pygame.display.set_mode(size)
 
 
 def message_to_screen(msg, color, x_displace=0, y_displace=0, font_size=0):
@@ -490,8 +486,6 @@ def gameLoop():
     level_list.append(Level_02(player))
 
     # Set the current level
-
-    # ***This information will hopefully come from a save state after the use of our start screen ***
     global current_level_no
     current_level = level_list[current_level_no]
 
