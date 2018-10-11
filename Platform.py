@@ -34,8 +34,8 @@ save_num = 0
 scores_path = "scoresfile.txt"
 scores_list = []
 is_paused = False
-save_changed = False
 save_done = False
+load_done = False
 
 # gameOn = True
 
@@ -122,13 +122,11 @@ def startMenu():
     pygame.display.update()
 
 def pauseDis():
-    global save_changed
     global save_done
 
     top_text = 'PAUSED'
     save_num_text = 'Current save file: ' + str(save_num)
     save_help_text = 'Press S to save to selected save file'
-    save_change_text = 'Save file ' + str(save_num) + ' selected'
     save_done_text = 'Successfully saved to save file ' + str(save_num)
     font_a = pygame.font.Font('freesansbold.ttf', 50)
     tSurf1, tRec1 = text_maker(top_text, font_a)
@@ -140,11 +138,7 @@ def pauseDis():
     gDisplay.blit(tSurf1, tRec1)
     gDisplay.blit(tSurf2, tRec2)
     gDisplay.blit(tSurf3, tRec3)
-    if save_changed:
-        tSurf4, tRec4 = text_maker(save_change_text, font_a)
-        tRec4.center = (500, 350)
-        gDisplay.blit(tSurf4, tRec4)
-    elif save_done:
+    if save_done:
         tSurf5, tRec5 = text_maker(save_done_text, font_a)
         tRec5.center = (500, 450)
         gDisplay.blit(tSurf5, tRec5)
@@ -154,7 +148,6 @@ def pauseDis():
 def pauseMenu():
 
     global is_paused
-    global save_changed
     global save_done
     global save_info
     global save_num
@@ -167,19 +160,29 @@ def pauseMenu():
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
+                save_done = False
                 is_paused = not is_paused
             elif event.key == pygame.K_s:
                 writeSave(save_info, save_num)
-                save_changed = False
                 save_done = True
             elif event.key in num_keys:
                 save_num = int(event.key) - 48
-                save_changed = True
                 save_done = False
 
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+
+def loadDis():
+
+    top_text = "Save loading menu"
+    save_num_text = 'Current save file: ' + str(save_num)
+    load_done_text = 'Sucessfully loaded save #' + str(save_num)
+
+def loadMenu():
+
+    global save_num
+    global load_done
 
 def scoreMenu():
 
