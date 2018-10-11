@@ -31,7 +31,11 @@ lives_left = 0
 enemies_killed = 0
 save_info = {}
 save_num = 0
+scores_path = "scoresfile.txt"
+scores_list = []
 is_paused = False
+save_changed = False
+save_done = False
 
 # gameOn = True
 
@@ -68,7 +72,7 @@ def text_maker(text, font_a):
     return surf, surf.get_rect()
 
 
-def start_dis():
+def startDis():
     text1 = 'Shape Wars: A Space Odyssey'
     text2 = 'Press ENTER to start'
     text3 = 'Press SPACE to start from save file'
@@ -94,7 +98,7 @@ def startMenu():
     pygame.display.update()
 
     # display menu
-    start_dis()
+    startDis()
     pygame.display.update()
 
     clock.tick(60)
@@ -112,18 +116,52 @@ def startMenu():
                 elif event.key == pygame.K_SPACE:
                     readSaveFile(save_num)
                     gameLoop()
+                elif event.key ==  pygame.K_s:
+                    scoreMenu()
 
+    pygame.display.update()
+
+def pauseDis():
+    global save_changed
+    global save_done
+
+    top_text = 'PAUSED'
+    save_num_text = 'Current save file: ' + str(save_num)
+    save_help_text = 'Press S to save to selected save file'
+    save_change_text = 'Save file ' + str(save_num) + ' selected'
+    save_done_text = 'Successfully saved to save file ' + str(save_num)
+    font_a = pygame.font.Font('freesansbold.ttf', 50)
+    tSurf1, tRec1 = text_maker(top_text, font_a)
+    tRec1.center = (500, 200)
+    tSurf2, tRec2 = text_maker(save_num_text, font_a)
+    tRec2.center = (500, 300)
+    tSurf3, tRec3 = text_maker(save_help_text, font_a)
+    tRec3.center = (500, 400)
+    gDisplay.blit(tSurf1, tRec1)
+    gDisplay.blit(tSurf2, tRec2)
+    gDisplay.blit(tSurf3, tRec3)
+    if save_changed:
+        tSurf4, tRec4 = text_maker(save_change_text, font_a)
+        tRec4.center = (500, 350)
+        gDisplay.blit(tSurf4, tRec4)
+    elif save_done:
+        tSurf5, tRec5 = text_maker(save_done_text, font_a)
+        tRec5.center = (500, 450)
+        gDisplay.blit(tSurf5, tRec5)
     pygame.display.update()
 
 
 def pauseMenu():
 
     global is_paused
+    global save_changed
+    global save_done
     global save_info
     global save_num
     num_keys = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 
     gDisplay.blit(mBackg, (0,0))
+    pauseDis()
     pygame.display.update()
 
     for event in pygame.event.get():
@@ -132,14 +170,34 @@ def pauseMenu():
                 is_paused = not is_paused
             elif event.key == pygame.K_s:
                 writeSave(save_info, save_num)
-                #Display message saying save successful
+                save_changed = False
+                save_done = True
             elif event.key in num_keys:
                 save_num = int(event.key) - 48
+                save_changed = True
+                save_done = False
 
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
 
+def scoreMenu():
+
+    global scores_list
+
+    gDisplay.blit(mBackg, (0, 0))
+    pygame.display.update()
+    scores_list = readScores(scores_path)
+    print(scores_list)
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                startMenu()
+
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
 '''
 Code followed platformer tutorial from:
 http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
@@ -615,6 +673,10 @@ def gameLoop():
     dt = clock.tick(60) / 1000
 
     mScreen = False
+
+    # Preliminarily update save info
+    updateSaveInfo()
+
     # -------- Main Program Loop -----------
     while not done:
         if not is_paused:
@@ -622,6 +684,7 @@ def gameLoop():
             restart_level = False
             if mScreen:
                 player.jump()
+            updateSaveInfo()
             for event in pygame.event.get():
 
                 # if window closed, quit
