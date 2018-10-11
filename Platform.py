@@ -85,7 +85,7 @@ def text_maker(text, font_a):
     return surf, surf.get_rect()
 
 
-def menu_dis():
+def start_dis():
     text1 = 'Shape Wars: A Space Odyssey'
     text2 = 'Press ENTER to start'
     text3 = 'Press SPACE to start from save file'
@@ -110,7 +110,7 @@ def startMenu():
     pygame.display.update()
 
     # display menu
-    menu_dis()
+    start_dis()
     pygame.display.update()
 
     clock.tick(60)
@@ -182,10 +182,10 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # Create an image of the block, and fill it with a color.
-        width = 30
-        height = 50
+        width = 40
+        height = 60
         self.image = pygame.Surface([width, height])
-        #self.image.fill(RED)
+        self.image.fill(RED)
 
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
@@ -207,27 +207,27 @@ class Player(pygame.sprite.Sprite):
 
         sprite_sheet = SpriteSheet("boy.png")
         # Load all the right facing images into a list
-        image = sprite_sheet.get_image(10, 5, 40, 50)
+        image = sprite_sheet.get_image(0, -5, 65, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(75, 5, 40, 50)
+        image = sprite_sheet.get_image(65, -5, 65, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(140, 5, 40, 50)
+        image = sprite_sheet.get_image(130, -5, 65, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(205, 5, 40, 50)
+        image = sprite_sheet.get_image(195, -5, 65, 60)
         self.walking_frames_r.append(image)
  
         # Load all the right facing images, then flip them
         # to face left.
-        image = sprite_sheet.get_image(10, 5, 40, 50)
+        image = sprite_sheet.get_image(0, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(75, 5, 40, 50)
+        image = sprite_sheet.get_image(65, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(140, 5, 40, 50)
+        image = sprite_sheet.get_image(130, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(205, 5, 40, 50)
+        image = sprite_sheet.get_image(195, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
  
