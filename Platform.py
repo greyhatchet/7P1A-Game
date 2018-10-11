@@ -424,8 +424,7 @@ class Level_01(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [100, 30, 400, 670],
-            [320, 30, 0, 670],
+            [500, 30, 0, 670],
             [70, 70, 500, 650],  #
             [70, 70, 700, 550],  #
             [70, 70, 750, 550],  #
@@ -498,7 +497,7 @@ def gameLoop():
 
     player.rect.x = 340
     position_scroll = 0
-    player.rect.y = SCREEN_HEIGHT - player.rect.height
+    player.rect.y = 500 #SCREEN_HEIGHT - player.rect.height
     active_sprite_list.add(player)
 
     # Loop until the user clicks the close button.
