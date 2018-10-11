@@ -32,6 +32,7 @@ enemies_killed = 0
 save_info = {}
 save_num = 0
 
+
 # gameOn = True
 
 # Read and writing saves
@@ -61,6 +62,7 @@ def updateSaveInfo():
     save_info["total_score"] = total_score
     save_info["enemies_killed"] = enemies_killed
 
+
 def text_maker(text, font_a):
     surf = font_a.render(text, True, (255, 255, 255))
     return surf, surf.get_rect()
@@ -81,6 +83,7 @@ def menu_dis():
     gDisplay.blit(tSurf2, tRec2)
     gDisplay.blit(tSurf3, tRec3)
     pygame.display.update()
+
 
 def startMenu():
     # display bkg
@@ -112,6 +115,7 @@ def startMenu():
 
     pygame.display.update()
 
+
 '''
 Code followed platformer tutorial from:
 http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
@@ -136,6 +140,7 @@ SCREEN_HEIGHT = 700
 size = [SCREEN_WIDTH, SCREEN_HEIGHT]
 screen = pygame.display.set_mode(size)
 
+
 def message_to_screen(msg, color, x_displace=0, y_displace=0, font_size=0):
     nice_font = pygame.font.Font('freesansbold.ttf', font_size)
     textSurface = nice_font.render(msg, True, color)
@@ -146,30 +151,30 @@ def message_to_screen(msg, color, x_displace=0, y_displace=0, font_size=0):
 
 class SpriteSheet(object):
     """ Class used to grab images out of a sprite sheet. """
- 
+
     def __init__(self, file_name):
         """ Constructor. Pass in the file name of the sprite sheet. """
- 
+
         # Load the sprite sheet.
         self.sprite_sheet = pygame.image.load(file_name).convert()
- 
- 
+
     def get_image(self, x, y, width, height):
         """ Grab a single image out of a larger spritesheet
             Pass in the x, y location of the sprite
             and the width and height of the sprite. """
- 
+
         # Create a new blank image
         image = pygame.Surface([width, height]).convert()
- 
+
         # Copy the sprite from the large sheet onto the smaller image
         image.blit(self.sprite_sheet, (0, 0), (x, y, width, height))
- 
+
         # Assuming black works as the transparent color
         image.set_colorkey(BLACK)
- 
+
         # Return the image
         return image
+
 
 global look_forward
 look_forward = True
@@ -202,7 +207,7 @@ class Player(pygame.sprite.Sprite):
         # of our player
         self.walking_frames_l = []
         self.walking_frames_r = []
- 
+
         # What direction is the player facing?
         self.direction = "R"
 
@@ -219,7 +224,7 @@ class Player(pygame.sprite.Sprite):
         self.walking_frames_r.append(image)
         image = sprite_sheet.get_image(205, 5, 40, 50)
         self.walking_frames_r.append(image)
- 
+
         # Load all the right facing images, then flip them
         # to face left.
         image = sprite_sheet.get_image(10, 5, 40, 50)
@@ -234,13 +239,12 @@ class Player(pygame.sprite.Sprite):
         image = sprite_sheet.get_image(205, 5, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
- 
+
         # Set the image the player starts with
         self.image = self.walking_frames_r[0]
- 
+
         # Set a reference to the image rect.
         self.rect = self.image.get_rect()
-        
 
     def update(self):
         # Move the player.
@@ -326,10 +330,11 @@ class Player(pygame.sprite.Sprite):
     def stop(self):
         # Called when the user lets off the keyboard.
         self.change_x = 0
-        
+
     def collide(self, enemy, enemy_list):
         if self.rect.colliderect(enemy.rect):  # Tests if the player is touching an enemy
             self.rect.x -= 50  # Pushes player to left if hit
+
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self, pos):
@@ -347,13 +352,14 @@ class Bullet(pg.sprite.Sprite):
         # Add the velocity to the position vector to move the sprite.
         self.pos += self.vel * dt
         self.rect.center = self.pos  # Update the rect pos.
-        if self.rect.right <= 0 or self.rect.left<=-20:
+        if self.rect.right <= 0 or self.rect.left <= -20:
             self.kill()
-            
+
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
             self.kill()
-            
+
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         # Create enemies
@@ -468,7 +474,7 @@ class Level_01(Level):
 
         self.level_limit = -1000
         self.level_limit_back = 200
-        
+
         # spawn enemies
         enemy_1 = Enemy()
         enemy_1.setPosition(775, 400)
@@ -476,8 +482,9 @@ class Level_01(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [100, 30, 400, 670],
-            [320, 30, 0, 670],
+            [3000, 30, 0, -10], #roof
+            [30, 1000, 0, 0], # left blocking
+            [500, 30, 0, 670], #ground
             [70, 70, 500, 650],  #
             [70, 70, 700, 550],  #
             [70, 70, 750, 550],  #
@@ -511,17 +518,29 @@ class Level_02(Level):
 
         self.level_limit = -1000
         self.level_limit_back = 200
-        
+
         # spawn enemies
         enemy_1 = Enemy()
         enemy_1.setPosition(825, 300)
         self.enemy_list.add(enemy_1)
 
         # Array with type of platform, and x, y location of the platform.
-        level = [[210, 30, 450, 570],
-                 [210, 30, 850, 420],
-                 [210, 30, 1000, 520],
-                 [210, 30, 1120, 280],
+        level = [
+            [3000, 30, 0, -10],  # roof
+            [30, 1000, 0, 0], #Left blocking
+            [500, 30, 0, 670], # ground
+            [30, 150, 500, 550],
+            [50, 30, 450, 550],
+            [150, 30, 600, 350],
+            [150, 30, 250, 430],
+            [150, 30, 850, 420],
+            [150, 30, 1000, 550],
+            [150, 30, 1120, 280],
+            [400, 30, 1300, 400],
+            [30, 150, 1700, 400],
+            [200, 30, 1700, 540],
+            [30, 150, 1900, 540],
+            [500, 30, 1900, 670]
                  ]
 
         # Go through the array above and add platforms
@@ -554,7 +573,7 @@ def gameLoop():
     # set player position
     player.rect.x = 340
     position_scroll = 0
-    player.rect.y = SCREEN_HEIGHT - player.rect.height
+    player.rect.y = 500 #SCREEN_HEIGHT - player.rect.height
     active_sprite_list.add(player)
 
     # Loop until the user clicks the close button.
@@ -565,7 +584,7 @@ def gameLoop():
     Sentinel = 0
     look_forward = True
     dt = clock.tick(60) / 1000
-    
+
     mScreen = False
     # -------- Main Program Loop -----------
     while not done:
@@ -592,8 +611,8 @@ def gameLoop():
                 if event.key == pygame.K_SPACE:
                     Sentinel = 1
                     if look_forward == True:
-                        pos = [ player.rect.x+40,
-                                player.rect.y+10]
+                        pos = [player.rect.x + 40,
+                               player.rect.y + 10]
                         bullet = Bullet(pos)
                         bullet.vel = pg.math.Vector2(450, 0)
                         bullet.level = current_level
@@ -606,7 +625,6 @@ def gameLoop():
                         bullet.vel = pg.math.Vector2(-450, 0)
                         bullet.level = current_level
                         bullet_list.add(bullet)
-
 
                 if event.key == pygame.K_r:
                     restart_level = True
@@ -654,6 +672,7 @@ def gameLoop():
                 current_level.shift_world(position_scroll)
                 position_scroll = 0
                 player.rect.x = 120
+                player.rect.y = 500  # SCREEN_HEIGHT - player.rect.height
 
         # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
         current_position = player.rect.x + current_level.world_shift
@@ -688,14 +707,14 @@ def gameLoop():
             pygame.mixer.music.stop()
         else:
             message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
-            message_to_screen("If stuck, press r to restart level",RED,-307,-275,18)
+            message_to_screen("If stuck, press r to restart level", RED, -307, -275, 18)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         # Limit to 60 frames per second
         clock.tick(60)
 
         # Go ahead and update the screen with what we've drawn.
-        pygame.display.flip()                
+        pygame.display.flip()
 
     pygame.quit()
     quit()
