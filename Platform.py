@@ -40,7 +40,7 @@ size = [SCREEN_WIDTH, SCREEN_HEIGHT]
 screen = pygame.display.set_mode(size)
 
 # Global constants
-current_level_no = 1
+current_level_no = 0
 total_score = 0.0
 lives_left = 0
 enemies_killed = 0
