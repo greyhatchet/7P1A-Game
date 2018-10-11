@@ -36,6 +36,10 @@ save_num = 0
 def readSaveFile(save_num):
     save_info = readSave(save_num)
     default_dict = {'game_level': 0, 'lives_left': 3, 'total_score': 0.0, 'enemies_killed': 0}
+    global current_level_no
+    global lives_left
+    global total_score
+    global enemies_killed
 
     try:
         current_level_no = int(save_info["game_level"])
@@ -424,8 +428,8 @@ class Level_01(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            #[100, 30, 400, 670],
-            [500, 30, 0, 670],
+            [100, 30, 400, 670],
+            [320, 30, 0, 670],
             [70, 70, 500, 650],  #
             [70, 70, 700, 550],  #
             [70, 70, 750, 550],  #
@@ -488,7 +492,7 @@ def gameLoop():
     # Set the current level
 
     # ***This information will hopefully come from a save state after the use of our start screen ***
-    current_level_no = 0
+    global current_level_no
     current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
@@ -496,7 +500,7 @@ def gameLoop():
 
     player.rect.x = 340
     position_scroll = 0
-    player.rect.y = 500 #SCREEN_HEIGHT - player.rect.height
+    player.rect.y = SCREEN_HEIGHT - player.rect.height
     active_sprite_list.add(player)
 
     # Loop until the user clicks the close button.
