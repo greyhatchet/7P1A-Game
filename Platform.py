@@ -46,6 +46,7 @@ lives_left = 0
 enemies_killed = 0
 save_info = {}
 save_num = 1
+is_paused = False
 
 # gameOn = True
 
@@ -131,6 +132,10 @@ def startMenu():
 
     pygame.display.update()
 
+def pauseMenu():
+    #Display menu bkg
+    gDisplay.blit(mBackg, (0,0))
+    pygame.display.update()
 
 def message_to_screen(msg, color, x_displace=0, y_displace=0, font_size=0):
     nice_font = pygame.font.Font('freesansbold.ttf', font_size)
@@ -479,13 +484,16 @@ def gameLoop():
     # Create the player
     player = Player()
 
+    # Load in necessary global constants
+    global current_level_no
+    global is_paused
+
     # Create all the levels
     level_list = []
     level_list.append(Level_01(player))
     level_list.append(Level_02(player))
 
     # Set the current level
-    global current_level_no
     try:
         current_level = level_list[current_level_no]
     except(IndexError):
@@ -507,115 +515,125 @@ def gameLoop():
     mScreen = False
     # -------- Main Program Loop -----------
     while not done:
-        # boolean to restart current level
-        restart_level = False
-        if mScreen:
-            player.jump()
-        for event in pygame.event.get():
+        if(not is_paused):
+            # boolean to restart current level
+            restart_level = False
+            if mScreen:
+                player.jump()
+            for event in pygame.event.get():
 
-            # if window closed, quit
-            if event.type == pygame.QUIT:
-                done = True
-
-            # interpret event of keys being pressed
-            if event.type == pygame.KEYDOWN and mScreen == False:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    player.go_left()
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    player.go_right()
-                if event.key == pygame.K_UP or event.key == pygame.K_w:
-                    player.jump()
-                if event.key == pygame.K_SPACE:
-                    shoot = Shoot()
-                    shoot.rect.x
-                    shoot.Fire()
-                if event.key == pygame.K_r:
-                    restart_level = True
-
-            # if at end game screen, press q to quit and r to restart level
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
+                # if window closed, quit
+                if event.type == pygame.QUIT:
                     done = True
-                if event.key == pygame.K_r:
-                    restart_level = True
-                    mScreen = False
 
-            # interpret event of keys being released
-            if event.type == pygame.KEYUP:
-                if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and player.change_x < 0:
-                    player.stop()
-                if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and player.change_x > 0:
-                    player.stop()
+                # interpret event of keys being pressed
+                if event.type == pygame.KEYDOWN and mScreen == False:
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                        player.go_left()
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                        player.go_right()
+                    if event.key == pygame.K_UP or event.key == pygame.K_w:
+                        player.jump()
+                    if event.key == pygame.K_SPACE:
+                        shoot = Shoot()
+                        shoot.rect.x
+                        shoot.Fire()
+                    if event.key == pygame.K_r:
+                        restart_level = True
+                    if event.key == pygame.K_p:
+                        is_paused = not is_paused
 
-        # Update the player.
-        active_sprite_list.update()
+                # if at end game screen, press q to quit and r to restart level
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        done = True
+                    if event.key == pygame.K_r:
+                        restart_level = True
+                        mScreen = False
 
-        # Update items in the level
-        current_level.update()
+                # interpret event of keys being released
+                if event.type == pygame.KEYUP:
+                    if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and player.change_x < 0:
+                        player.stop()
+                    if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and player.change_x > 0:
+                        player.stop()
 
-        # If the player gets near the right side, shift the world left (-x)
-        if player.rect.right >= 500:
-            diff = player.rect.right - 500
-            player.rect.right = 500
-            position_scroll += diff
-            current_level.shift_world(-diff)
+            # Update the player.
+            active_sprite_list.update()
 
-        # If the player gets near the left side, shift the world right (+x)
-        if player.rect.left <= 120:
-            diff = 120 - player.rect.left
-            player.rect.left = 120
-            position_scroll -= diff
-            current_level.shift_world(diff)
+            # Update items in the level
+            current_level.update()
 
-        # if r is pressed, return block to initial level position
-        if restart_level == True:
-            if position_scroll != 0:
-                current_level.shift_world(position_scroll)
-                position_scroll = 0
+            # If the player gets near the right side, shift the world left (-x)
+            if player.rect.right >= 500:
+                diff = player.rect.right - 500
+                player.rect.right = 500
+                position_scroll += diff
+                current_level.shift_world(-diff)
+
+            # If the player gets near the left side, shift the world right (+x)
+            if player.rect.left <= 120:
+                diff = 120 - player.rect.left
+                player.rect.left = 120
+                position_scroll -= diff
+                current_level.shift_world(diff)
+
+            # if r is pressed, return block to initial level position
+            if restart_level == True:
+                if position_scroll != 0:
+                    current_level.shift_world(position_scroll)
+                    position_scroll = 0
+                    player.rect.x = 120
+
+            # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
+            current_position = player.rect.x + current_level.world_shift
+            if current_position < current_level.level_limit:
+                if current_level_no < len(level_list) - 1:
+                    player.rect.x = 120
+                    current_level_no += 1
+                    current_level = level_list[current_level_no]
+                    player.level = current_level
+                    position_scroll = 0
+                else:
+                    mScreen = True
+
+            '''
+            print(current_level_no, 'Boo')
+            print(current_position)
+            if current_position > current_level.level_limit_back and current_level_no != 0:
                 player.rect.x = 120
+                if current_level_no < len(level_list) - 1:
+                    current_level_no -= 1
+                    print(current_level_no)
+                    current_level = level_list[current_level_no]
+                    player.level = current_level
+            '''
 
-        # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
-        current_position = player.rect.x + current_level.world_shift
-        if current_position < current_level.level_limit:
-            if current_level_no < len(level_list) - 1:
-                player.rect.x = 120
-                current_level_no += 1
-                current_level = level_list[current_level_no]
-                player.level = current_level
-                position_scroll = 0
+            # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
+            current_level.draw(screen)
+            active_sprite_list.draw(screen)
+            if mScreen:
+                message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
+                message_to_screen('To quit: press q', BLACK, 0, -30, 16)
+                message_to_screen('To restart level: press r', BLACK, 0, -15, 16)
+                pygame.mixer.music.stop()
             else:
-                mScreen = True
+                message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
+                message_to_screen("If stuck, press r to restart level",RED,-307,-275,18)
+            # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
-        '''
-        print(current_level_no, 'Boo')
-        print(current_position)
-        if current_position > current_level.level_limit_back and current_level_no != 0:
-            player.rect.x = 120
-            if current_level_no < len(level_list) - 1:
-                current_level_no -= 1
-                print(current_level_no)
-                current_level = level_list[current_level_no]
-                player.level = current_level
-        '''
+            # Limit to 60 frames per second
+            clock.tick(60)
 
-        # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
-        current_level.draw(screen)
-        active_sprite_list.draw(screen)
-        if mScreen:
-            message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
-            message_to_screen('To quit: press q', BLACK, 0, -30, 16)
-            message_to_screen('To restart level: press r', BLACK, 0, -15, 16)
-            pygame.mixer.music.stop()
-        else:
-            message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
-            message_to_screen("If stuck, press r to restart level",RED,-307,-275,18)
-        # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
+            # Go ahead and update the screen with what we've drawn.
+            pygame.display.flip()
 
-        # Limit to 60 frames per second
-        clock.tick(60)
-
-        # Go ahead and update the screen with what we've drawn.
-        pygame.display.flip()
+        elif(is_paused):
+            player.stop()
+            pauseMenu()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                    is_paused = not is_paused
 
     pygame.quit()
     quit()
