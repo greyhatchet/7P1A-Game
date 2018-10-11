@@ -326,6 +326,10 @@ class Player(pygame.sprite.Sprite):
     def stop(self):
         # Called when the user lets off the keyboard.
         self.change_x = 0
+        
+    def collide(self, enemy, enemy_list):
+        if self.rect.colliderect(enemy.rect):  # Tests if the player is touching an enemy
+            self.rect.x -= 50  # Pushes player to left if hit
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self, pos):
@@ -348,6 +352,47 @@ class Bullet(pg.sprite.Sprite):
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
             self.kill
+            
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        # Create enemies
+
+        super().__init__()
+
+        width = 50
+        height = 50
+        self.image = pygame.Surface([width, height])
+        self.image.fill(RED)
+
+        self.rect = self.image.get_rect()
+
+        # set movement counter
+        self.counter = 0
+
+        self.change_x = 0
+        self.change_y = 0
+
+    # Set the position of the enemy
+    def setPosition(self, x, y):
+        self.rect.left = x
+        self.rect.top = y
+
+    def move(self):
+        # enemy movement, paces left and right
+        # distance sets how far
+        # speed sets how fast
+        distance = 100
+        speed = 2
+
+        if self.counter >= 0 and self.counter <= distance:
+            self.rect.x += speed
+        elif self.counter >= distance and self.counter <= distance * 2:
+            self.rect.x -= speed
+        else:
+            self.counter = 0
+
+        self.counter += 1
+
 
 class Platform(pygame.sprite.Sprite):
     # Platform the user can jump on
@@ -393,6 +438,9 @@ class Level():
         # Draw all the sprite lists that we have
         self.platform_list.draw(screen)
         self.enemy_list.draw(screen)
+        for enemy in self.enemy_list:
+            enemy.move()
+            self.player.collide(enemy, self.enemy_list)  # Checks if enemy is touching player
 
     def shift_world(self, shift_x):
 
@@ -419,6 +467,11 @@ class Level_01(Level):
 
         self.level_limit = -1000
         self.level_limit_back = 200
+        
+        # spawn enemies
+        enemy_1 = Enemy()
+        enemy_1.setPosition(775, 400)
+        self.enemy_list.add(enemy_1)
 
         # Array with width, height, x, and y of platform
         level = [
@@ -457,6 +510,11 @@ class Level_02(Level):
 
         self.level_limit = -1000
         self.level_limit_back = 200
+        
+        # spawn enemies
+        enemy_1 = Enemy()
+        enemy_1.setPosition(825, 300)
+        self.enemy_list.add(enemy_1)
 
         # Array with type of platform, and x, y location of the platform.
         level = [[210, 30, 450, 570],
