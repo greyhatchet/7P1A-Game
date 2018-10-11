@@ -187,8 +187,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # Create an image of the block, and fill it with a color.
-        width = 40
-        height = 60
+        width = 30
+        height = 50
         self.image = pygame.Surface([width, height])
         self.image.fill(RED)
 
@@ -212,27 +212,27 @@ class Player(pygame.sprite.Sprite):
 
         sprite_sheet = SpriteSheet("boy.png")
         # Load all the right facing images into a list
-        image = sprite_sheet.get_image(0, -5, 65, 60)
+        image = sprite_sheet.get_image(10, 5, 40, 50)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(65, -5, 65, 60)
+        image = sprite_sheet.get_image(75, 5, 40, 50)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(130, -5, 65, 60)
+        image = sprite_sheet.get_image(140, 5, 40, 50)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(195, -5, 65, 60)
+        image = sprite_sheet.get_image(205, 5, 40, 50)
         self.walking_frames_r.append(image)
  
         # Load all the right facing images, then flip them
         # to face left.
-        image = sprite_sheet.get_image(0, -5, 65, 60)
+        image = sprite_sheet.get_image(10, 5, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(65, -5, 65, 60)
+        image = sprite_sheet.get_image(75, 5, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(130, -5, 65, 60)
+        image = sprite_sheet.get_image(140, 5, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(195, -5, 65, 60)
+        image = sprite_sheet.get_image(205, 5, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
  
