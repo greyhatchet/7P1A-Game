@@ -676,9 +676,14 @@ def gameLoop():
 
         # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
         current_position = player.rect.x + current_level.world_shift
+        current_position = player.rect.x + current_level.world_shift
         if current_position < current_level.level_limit:
             if current_level_no < len(level_list) - 1:
                 player.rect.x = 120
+                current_level_no += 1
+                current_level = level_list[current_level_no]
+                player.level = current_level
+                position_scroll = 0
             else:
                 mScreen = True
 
