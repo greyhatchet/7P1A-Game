@@ -194,7 +194,7 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-                # This holds all the images for the animated walk left/right
+        # This holds all the images for the animated walk left/right
         # of our player
         self.walking_frames_l = []
         self.walking_frames_r = []
@@ -207,27 +207,27 @@ class Player(pygame.sprite.Sprite):
 
         sprite_sheet = SpriteSheet("boy.png")
         # Load all the right facing images into a list
-        image = sprite_sheet.get_image(0, 0, 65, 60)
+        image = sprite_sheet.get_image(0, -5, 65, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(65, 0, 65, 60)
+        image = sprite_sheet.get_image(65, -5, 65, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(130, 0, 65, 60)
+        image = sprite_sheet.get_image(130, -5, 65, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(195, 0, 65, 60)
+        image = sprite_sheet.get_image(195, -5, 65, 60)
         self.walking_frames_r.append(image)
  
         # Load all the right facing images, then flip them
         # to face left.
-        image = sprite_sheet.get_image(0, 0, 65, 60)
+        image = sprite_sheet.get_image(0, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(65, 0, 65, 60)
+        image = sprite_sheet.get_image(65, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(130, 0, 65, 60)
+        image = sprite_sheet.get_image(130, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(195, 0, 65, 60)
+        image = sprite_sheet.get_image(195, -5, 65, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
  
@@ -310,11 +310,13 @@ class Player(pygame.sprite.Sprite):
     def go_left(self):
         # Called when the user hits the left arrow.
         self.change_x = -6
+        self.direction = "L"
         look_forward = False
 
     def go_right(self):
         # Called when the user hits the right arrow.
         self.change_x = 6
+        self.direction = "R"
         look_forward = True
 
     def stop(self):
