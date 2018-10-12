@@ -60,11 +60,30 @@ def readSaveFile(save_num):
         enemies_killed = int(save_info["enemies_killed"])
 
 
+# updateSaveInfo() sets the new dict to be saved later
 def updateSaveInfo():
+    global current_level_no
+    global lives_left
+    global total_score
+    global enemies_killed
+
     save_info["game_level"] = current_level_no
     save_info["lives_left"] = lives_left
     save_info["total_score"] = total_score
     save_info["enemies_killed"] = enemies_killed
+
+
+# setSaveInfo() is called when loading a save to update the values with the info loaded from save
+def setSaveInfo():
+    global current_level_no
+    global lives_left
+    global total_score
+    global enemies_killed
+
+    current_level_no = int(save_info["game_level"])
+    lives_left = int(save_info["lives_left"])
+    total_score = save_info["total_score"]
+    enemies_killed = int(save_info["enemies_killed"])
 
 
 def text_maker(text, font_a):
@@ -103,6 +122,8 @@ def startMenu():
 
     clock.tick(60)
     start = True
+    load = False
+    scores = False
 
     while start:
         for event in pygame.event.get():
@@ -114,10 +135,19 @@ def startMenu():
                 if event.key == pygame.K_RETURN:
                     gameLoop()
                 elif event.key == pygame.K_SPACE:
-                    readSaveFile(save_num)
-                    gameLoop()
+                    start = False
+                    load = True
+                    loadMenu()
                 elif event.key ==  pygame.K_s:
+                    start = False
+                    scores = True
                     scoreMenu()
+
+    while load:
+        loadMenu()
+
+    while scores:
+        scoreMenu()
 
     pygame.display.update()
 
@@ -139,9 +169,9 @@ def pauseDis():
     gDisplay.blit(tSurf2, tRec2)
     gDisplay.blit(tSurf3, tRec3)
     if save_done:
-        tSurf5, tRec5 = text_maker(save_done_text, font_a)
-        tRec5.center = (500, 450)
-        gDisplay.blit(tSurf5, tRec5)
+        tSurf4, tRec4 = text_maker(save_done_text, font_a)
+        tRec4.center = (500, 450)
+        gDisplay.blit(tSurf4, tRec4)
     pygame.display.update()
 
 
@@ -151,7 +181,8 @@ def pauseMenu():
     global save_done
     global save_info
     global save_num
-    num_keys = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
+    num_keys = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4,
+                pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 
     gDisplay.blit(mBackg, (0,0))
     pauseDis()
@@ -175,14 +206,55 @@ def pauseMenu():
 
 def loadDis():
 
+    global load_done
+
     top_text = "Save loading menu"
     save_num_text = 'Current save file: ' + str(save_num)
+    start_game_text = 'Press ENTER to start'
+    load_save_text = 'Press SPACE to load selected save'
     load_done_text = 'Sucessfully loaded save #' + str(save_num)
+    font_a = pygame.font.Font('freesansbold.ttf', 50)
+    tSurf1, tRec1 = text_maker(top_text, font_a)
+    tRec1.center = (500, 200)
+    tSurf2, tRec2 = text_maker(save_num_text, font_a)
+    tRec2.center = (500, 300)
+    tSurf3, tRec3 = text_maker(start_game_text, font_a)
+    tRec3.center = (500, 400)
+    tSurf4, tRec4 = text_maker(load_save_text, font_a)
+    tRec4.center = (500, 500)
+    gDisplay.blit(tSurf1, tRec1)
+    gDisplay.blit(tSurf2, tRec2)
+    gDisplay.blit(tSurf3, tRec3)
+    gDisplay.blit(tSurf4, tRec4)
+    if load_done:
+        tSurf5, tRec5 = text_maker(load_done_text, font_a)
+        tRec5.center = (500, 450)
+        gDisplay.blit(tSurf5, tRec5)
+    pygame.display.update()
+
 
 def loadMenu():
 
     global save_num
+    global save_info
     global load_done
+    num_keys = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4,
+                pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
+
+    gDisplay.blit(mBackg, (0,0))
+    loadDis()
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                save_info = readSave(save_num)
+                setSaveInfo()
+                load_done = True
+            if event.key == pygame.K_RETURN:
+                gameLoop()
+            if event.key in num_keys:
+                save_num = int(event.key) - 48
 
 def scoreMenu():
 
@@ -811,6 +883,7 @@ def gameLoop():
             else:
                 message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
                 message_to_screen("If stuck, press r to restart level", RED, -307, -275, 18)
+                message_to_screen("Press P to pause", RED, -368, -250, 18)
             # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
             # Limit to 60 frames per second
