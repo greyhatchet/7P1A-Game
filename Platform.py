@@ -94,7 +94,7 @@ def text_maker(text, font_a):
 def startDis():
     text1 = 'Shape Wars: A Space Odyssey'
     text2 = 'Press ENTER to start'
-    text3 = 'Press SPACE to start from save file'
+    text3 = 'Press SPACE to choose load a save file'
     font_a = pygame.font.Font('freesansbold.ttf', 50)
     tSurf1, tRec1 = text_maker(text1, font_a)
     tRec1.center = (500, 200)
