@@ -38,21 +38,50 @@ class PlayerTestCase(unittest.TestCase):
         self.player.stop()
         self.assertEqual(self.player.change_x, 0)
 
+'''
 class ShootTestCase(unittest.TestCase):
 
     def setUp(self):
         self.shoot = Shoot()
 
-    '''
+    
     def test_default_size(self):
         self.assertEqual(self.shoot.image, pygame.Surface([2,5]))
-    '''
+    
 
     def test_default_speed(self):
         self.assertEqual([self.shoot.change_x, self.shoot.change_y], [30,0])
 
     def test_default_level(self):
         self.assertEqual(self.shoot.level, None)
+        
+'''
+
+class PlatformTestCase(unittest.TestCase):
+
+    def setUp(self, width = 0, height = 0):
+        self.platform = Platform(width, height)
+        self.platform.width = width
+        self.platform.height = height
+
+    def test_inits(self):
+        self.assertEqual(str(self.platform.image), str(pygame.Surface([self.platform.width, self.platform.height])))
+        self.assertEqual(self.platform.rect, self.platform.image.get_rect())
+
+class LevelTestCase(unittest.TestCase):
+
+    def setUp(self):
+        player = Player()
+        self.level = Level(player)
+
+    def test_inits(self):
+        self.assertEqual(str(self.level.platform_list), '<Group(0 sprites)>')
+        self.assertEqual(str(self.level.enemy_list), '<Group(0 sprites)>')
+        self.assertEqual(self.level.world_shift, 0)
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
