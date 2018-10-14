@@ -516,6 +516,11 @@ class Bullet(pg.sprite.Sprite):
         for block in block_hit_list:
             self.kill()
 
+        block_hit_list = pygame.sprite.spritecollide(self, self.level.enemy_list, False)
+        for block in block_hit_list:
+            self.kill()
+            block.kill()
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -556,6 +561,8 @@ class Enemy(pygame.sprite.Sprite):
             self.counter = 0
 
         self.counter += 1
+
+
 
 
 class Platform(pygame.sprite.Sprite):
@@ -605,6 +612,7 @@ class Level():
         for enemy in self.enemy_list:
             enemy.move()
             self.player.collide(enemy, self.enemy_list)  # Checks if enemy is touching player
+
 
     def shift_world(self, shift_x):
 
