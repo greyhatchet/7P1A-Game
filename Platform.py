@@ -628,11 +628,10 @@ class Level():
 
 
 # Create platforms for the level
-class Level_01(Level):
-    # Definition for level 1.
+class Level_00(Level):
+    # Definition for level 0.
 
     def __init__(self, player):
-        # Create level 1.
 
         # Call the parent constructor
         Level.__init__(self, player)
@@ -650,15 +649,18 @@ class Level_01(Level):
             [3000, 30, 0, -10], #roof
             [30, 1000, 0, 0], # left blocking
             [500, 30, 0, 670], #ground
+
             [70, 70, 500, 650],  #
             [70, 70, 700, 550],  #
             [70, 70, 750, 550],  #
 
             [210, 70, 500, 600],  #
+
             [210, 70, 800, 500],  #
             [70, 70, 1000, 550],  #
             [210, 70, 1000, 600],  #
             [210, 70, 1120, 380],  #
+
             [1500, 30, 1210, 670],  # #bottom
         ]
 
@@ -672,16 +674,15 @@ class Level_01(Level):
 
 
 # Create platforms for the level
-class Level_02(Level):
+class Level_01(Level):
     # Definition for level 2.
 
     def __init__(self, player):
-        # Create level 2.
 
         # Call the parent constructor
         Level.__init__(self, player)
 
-        self.level_limit = -1500
+        self.level_limit = -1000
         self.level_limit_back = 200
 
         # spawn enemies
@@ -692,23 +693,27 @@ class Level_02(Level):
         enemy_2.setPosition(700, 600)
         self.enemy_list.add(enemy_2)
 
-        # Array with type of platform, and x, y location of the platform.
+        # Array with width, height, x, and y of platform
         level = [
             [3000, 30, 0, -10],  # roof
             [30, 1000, 0, 0], #Left blocking
-            [500, 30, 0, 670], # ground
-            [30, 150, 500, 550],
-            [50, 30, 450, 550],
-            [150, 30, 600, 350],
-            [150, 30, 250, 430],
-            [150, 30, 850, 420],
-            [150, 30, 1000, 550],
-            [150, 30, 1120, 280],
-            [400, 30, 1300, 400],
-            [30, 150, 1700, 400],
-            [200, 30, 1700, 540],
-            [30, 150, 1900, 540],
-            [500, 30, 1900, 670]
+            [500, 30, 0, 670], # beg ground
+
+            [30, 150, 500, 550], #A
+            [50, 30, 450, 550], #B
+            [150, 30, 250, 430], #C
+
+            [150, 30, 600, 350], #D
+            [150, 30, 850, 420], #E
+            [150, 30, 1000, 550], #F
+            [150, 30, 1120, 280], #G
+
+            [250, 30, 1300, 400], #H
+            [30, 150, 1550, 400], #I
+            [200, 30, 1550, 540], #J
+            [30, 150, 1750, 540], #K
+
+            [1000, 30, 1750, 670] # end ground
                  ]
 
         # Go through the array above and add platforms
@@ -719,6 +724,172 @@ class Level_02(Level):
             block.player = self.player
             self.platform_list.add(block)
 
+# Create platforms for the level
+class Level_02(Level):
+    # Definition for level 2.
+
+    def __init__(self, player):
+
+        # Call the parent constructor
+        Level.__init__(self, player)
+
+        self.level_limit = -1000
+        self.level_limit_back = 200
+
+        # spawn enemies
+        enemy_1 = Enemy()
+        enemy_1.setPosition(1475, 290)
+        self.enemy_list.add(enemy_1)
+        enemy_2 = Enemy()
+        enemy_2.setPosition(1475, 450)
+        self.enemy_list.add(enemy_2)
+        enemy_3 = Enemy()
+        enemy_3.setPosition(1475, 550)
+        self.enemy_list.add(enemy_3)
+        enemy_4 = Enemy()
+        enemy_4.setPosition(1475, 650)
+        self.enemy_list.add(enemy_4)
+
+        # Array with width, height, x, and y of platform
+        level = [
+            [3000, 30, 0, -10],  # roof
+            [30, 1000, 0, 0], #Left blocking
+            [500, 30, 0, 670], # beg ground
+
+            [150, 30, 250, 550],  # A
+            [30, 30, 500, 450],  # B
+            [300, 30, 600, 350],  # C
+            [250, 30, 870, 670],  # D
+            [200, 450, 1120, 550], # E
+
+            [150, 30, 1475, 400],  # F
+            [150, 30, 1475, 250],  # G
+            [30, 300, 1750, 500], #H
+
+            [1000, 30, 1750, 670]  # end ground
+            ]
+
+        # Go through the array above and add platforms
+        for platform in level:
+            block = Platform(platform[0], platform[1])
+            block.rect.x = platform[2]
+            block.rect.y = platform[3]
+            block.player = self.player
+            self.platform_list.add(block)
+
+
+class Level_03(Level):
+    # Definition for level 3.
+
+    def __init__(self, player):
+
+        # Call the parent constructor
+        Level.__init__(self, player)
+
+        self.level_limit = -1000
+        self.level_limit_back = 200
+
+        # spawn enemies
+        '''enemy_1 = Enemy()
+        enemy_1.setPosition(1475, 290)
+        self.enemy_list.add(enemy_1)
+        enemy_2 = Enemy()
+        enemy_2.setPosition(1475, 450)
+        self.enemy_list.add(enemy_2)
+        enemy_3 = Enemy()
+        enemy_3.setPosition(1475, 550)
+        self.enemy_list.add(enemy_3)
+        enemy_4 = Enemy()
+        enemy_4.setPosition(1475, 650)
+        self.enemy_list.add(enemy_4)'''
+
+        # Array with width, height, x, and y of platform
+        level = [
+            [3000, 30, 0, -10],  # roof
+            [30, 1000, 0, 0],  # Left blocking
+            [500, 30, 0, 670],  # beg ground
+            [50, 30, 550, 550],  # A
+            [50, 30, 650, 450], #B
+            [50, 30, 750, 350],  # C
+            [50, 30, 850, 250],  # D
+            [50, 30, 950, 150],  # E
+            [50, 30, 1050, 250],  # F
+            [50, 30, 1150, 350],  # G
+            [50, 30, 1250, 450],  # H
+            [50, 30, 1350, 550],  # I
+            [50, 30, 1450, 450],  # J
+            [50, 30, 1550, 350],  # K
+            [50, 30, 1650, 450],  # L
+            [30, 300, 1750, 500],  # M
+            [1000, 30, 1750, 670]  # end ground
+            ]
+
+        # Go through the array above and add platforms
+        for platform in level:
+            block = Platform(platform[0], platform[1])
+            block.rect.x = platform[2]
+            block.rect.y = platform[3]
+            block.player = self.player
+            self.platform_list.add(block)
+
+class Level_04(Level):
+    # Definition for level 4.
+
+    def __init__(self, player):
+
+        # Call the parent constructor
+        Level.__init__(self, player)
+
+        self.level_limit = -1000
+        self.level_limit_back = 200
+
+        # spawn enemies
+        enemy_1 = Enemy()
+        enemy_1.setPosition(975, 600)
+        self.enemy_list.add(enemy_1)
+        '''enemy_2 = Enemy()
+        enemy_2.setPosition(1475, 450)
+        self.enemy_list.add(enemy_2)
+        enemy_3 = Enemy()
+        enemy_3.setPosition(1475, 550)
+        self.enemy_list.add(enemy_3)
+        enemy_4 = Enemy()
+        enemy_4.setPosition(1475, 650)
+        self.enemy_list.add(enemy_4)'''
+
+        # Array with width, height, x, and y of platform
+        level = [
+            [3000, 30, 0, -10],  # roof
+            [30, 1000, 0, 0],  # Left blocking
+            [2500, 30, 0, 670], # beg ground
+
+            [30, 60, 300, 640],  # A
+            [30, 90, 400, 610],  # B
+            [30, 120, 500, 580], # C
+            [30, 150, 600, 550], # D
+            [30, 180, 700, 520], # E
+            [30, 180, 800, 520], # F
+            [30, 150, 900, 550], #G
+            # enemy
+            [30, 150, 1250, 550], #H
+            [30, 90, 1350, 610],  #I
+
+            [50, 100, 1500, 600],  # J
+            [50, 140, 1550, 560],  # K
+            [50, 180, 1600, 520],  # L
+            [50, 220, 1650, 480],  # M
+            [50, 260, 1700, 440],  # N
+
+            ]
+
+
+        # Go through the array above and add platforms
+        for platform in level:
+            block = Platform(platform[0], platform[1])
+            block.rect.x = platform[2]
+            block.rect.y = platform[3]
+            block.player = self.player
+            self.platform_list.add(block)
 
 def gameLoop():
     # Load required global variables
@@ -730,8 +901,11 @@ def gameLoop():
 
     # Create all the levels
     level_list = []
+    level_list.append(Level_00(player))
     level_list.append(Level_01(player))
     level_list.append(Level_02(player))
+    level_list.append(Level_03(player))
+    level_list.append(Level_04(player))
 
     # Set the current level
     current_level = level_list[current_level_no]
