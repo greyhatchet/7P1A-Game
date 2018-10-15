@@ -112,7 +112,7 @@ def startMenu():
     # display bkg
     gDisplay.blit(mBackg, (0, 0))
     # play music
-    #pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1)
 
     pygame.display.update()
 
