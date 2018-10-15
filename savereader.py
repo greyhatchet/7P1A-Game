@@ -1,5 +1,6 @@
 # readSave() reads the desired save text file into a new dictionary and returns it
-save_files = ['savefile1.txt', 'savefile2.txt', 'savefile3.txt']
+save_files = ['savefile0.txt', 'savefile1.txt', 'savefile2.txt', 'savefile3.txt', 'savefile4.txt',
+              'savefile5.txt', 'savefile6.txt', 'savefile7.txt', 'savefile8.txt', 'savefile9.txt']
 
 def readSave(save_num):
     save_dict = {}

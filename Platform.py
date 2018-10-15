@@ -42,6 +42,11 @@ load_done = False
 # Read and writing saves
 # Default dict is used to handle possible errors raised by readSave(), which will cause it to return an empty dictionary
 def readSaveFile(save_num):
+    global current_level_no
+    global lives_left
+    global total_score
+    global enemies_killed
+
     save_info = readSave(save_num)
     default_dict = {'game_level': 0, 'lives_left': 3, 'total_score': 0.0, 'enemies_killed': 0}
 
@@ -53,7 +58,6 @@ def readSaveFile(save_num):
 
     except(KeyError):
         save_info = default_dict
-
         current_level_no = int(save_info["game_level"])
         lives_left = int(save_info["lives_left"])
         total_score = save_info["total_score"]

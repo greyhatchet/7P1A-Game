@@ -6,8 +6,8 @@ class ScoreWriterTestCase(unittest.TestCase):
 
     def test_writeScores(self):
         self.assertTrue(writeScores([('a', 2), ('b', 3)]))
+        self.assertTrue(writeScores([]))
         self.assertTrue(not writeScores([1, 3, 4]))
-        self.assertTrue(not writeScores([]))
         self.assertTrue(not writeScores('a'))
 
 

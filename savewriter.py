@@ -1,6 +1,7 @@
 # writeSave takes a dictionary where the keys are the relevant data (e.g. game level) with their respective values:
 # Added boolean returns to facilitate unit testing
-save_files = ['savefile1.txt', 'savefile2.txt', 'savefile3.txt']
+save_files = ['savefile0.txt', 'savefile1.txt', 'savefile2.txt', 'savefile3.txt', 'savefile4.txt',
+              'savefile5.txt', 'savefile6.txt', 'savefile7.txt', 'savefile8.txt', 'savefile9.txt']
 
 def writeSave(save_dict, save_num):
     try:
@@ -26,4 +27,4 @@ def writeSave(save_dict, save_num):
 
 # Test lines:
 # new_save = {'game_level': 91, 'total_score': 9, 'enemies_killed': 80, 'lives_left': 100}
-# writeSave(new_save)
+# writeSave(new_save, 1)
