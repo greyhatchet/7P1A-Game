@@ -1050,6 +1050,7 @@ def gameLoop():
                     current_level = level_list[current_level_no]
                     player.level = current_level
                     position_scroll = 0
+                    bullet_list = pygame.sprite.Group()
                 else:
                     mScreen = True
 
