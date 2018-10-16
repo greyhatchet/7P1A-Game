@@ -27,8 +27,10 @@ clock = pygame.time.Clock()
 # Global constants
 current_level_no = 0
 total_score = 0.0
+current_level_score = 0.0
 lives_left = 0
 enemies_killed = 0
+current_enemies_killed = 0
 save_info = {}
 save_num = 0
 scores_path = "scoresfile.txt"
@@ -514,11 +516,16 @@ class Bullet(pg.sprite.Sprite):
         self.level = None
 
     def update(self, dt):
+
+        global current_enemies_killed
+        global current_level_score
+
         # Add the velocity to the position vector to move the sprite.
         self.pos += self.vel * dt
         self.rect.center = self.pos  # Update the rect pos.
         if self.rect.right <= 0 or self.rect.left <= -20:
             self.kill()
+
 
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
@@ -528,6 +535,8 @@ class Bullet(pg.sprite.Sprite):
         for block in block_hit_list:
             self.kill()
             block.kill()
+            current_enemies_killed += 1
+            current_level_score += 100
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -903,6 +912,11 @@ def gameLoop():
     # Load required global variables
     global current_level_no
     global is_paused
+    global lives_left
+    global enemies_killed
+    global current_enemies_killed
+    global total_score
+    global current_level_score
 
     # Create the player
     player = Player()
@@ -1029,6 +1043,7 @@ def gameLoop():
 
             # Player Death
             if player.health == 0:
+                lives_left -= 1
                 player.health = 3
                 restart_level = True
 
@@ -1052,12 +1067,18 @@ def gameLoop():
                     player.level = current_level
                     position_scroll = 0
                     bullet_list = pygame.sprite.Group()
+
+                    total_score += current_level_score
+                    current_level_score = 0.0
+                    enemies_killed += current_enemies_killed
+                    current_enemies_killed = 0
                 else:
                     mScreen = True
 
             '''
             print(current_level_no, 'Boo')
             print(current_position)
+    
             if current_position > current_level.level_limit_back and current_level_no != 0:
                 player.rect.x = 120
                 if current_level_no < len(level_list) - 1:
@@ -1082,6 +1103,9 @@ def gameLoop():
                 message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
                 message_to_screen("If stuck, press r to restart level", RED, -307, -275, 18)
                 message_to_screen("Press P to pause", RED, -368, -250, 18)
+                message_to_screen("Lives left: " + str(lives_left), RED, -390, -225, 18)
+                message_to_screen("Total score: " + str(int(total_score + current_level_score)), RED, -383, -200, 18)
+                message_to_screen("Enemies killed: " + str(enemies_killed + current_enemies_killed), RED, -366, -175, 18)
             # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
             # Limit to 60 frames per second
