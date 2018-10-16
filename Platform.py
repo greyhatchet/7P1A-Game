@@ -604,62 +604,45 @@ class Bullet(pg.sprite.Sprite):
             current_level_score += 100
 
 
-class Level():
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        # Create enemies
 
-    def __init__(self, player):
+        super().__init__()
 
-        # Constructor.
+        width = 50
+        height = 50
+        self.image = pygame.Surface([width, height])
+        self.image.fill(RED)
 
-        self.platform_list = pygame.sprite.Group()
-        self.enemy_list = pygame.sprite.Group()
-        self.player = player
+        self.rect = self.image.get_rect()
 
-        # How far this world has been scrolled left/right
-        self.world_shift = 0
+        # set movement counter
+        self.counter = 0
 
-        #local enemy list to add 
-        self.enemy_to_spawn = []
+        self.change_x = 0
+        self.change_y = 0
 
-    # Update everythign on this level
-    def update(self):
-        # Update everything in this level.
-        self.platform_list.update()
-        self.enemy_list.update()
+    # Set the position of the enemy
+    def setPosition(self, x, y):
+        self.rect.left = x
+        self.rect.top = y
 
-    def draw(self, screen):
-        # Draw everything on this level.
+    def move(self):
+        # enemy movement, paces left and right
+        # distance sets how far
+        # speed sets how fast
+        distance = 100
+        speed = 2
 
-        # Draw the background
-        screen.fill(BLUE)
+        if self.counter >= 0 and self.counter <= distance:
+            self.rect.x += speed
+        elif self.counter >= distance and self.counter <= distance * 2:
+            self.rect.x -= speed
+        else:
+            self.counter = 0
 
-        # Draw all the sprite lists that we have
-        self.platform_list.draw(screen)
-        self.enemy_list.draw(screen)
-        for enemy in self.enemy_list:
-            enemy.move()
-            self.player.collide(enemy, self.enemy_list)  # Checks if enemy is touching player
-
-    def shift_world(self, shift_x):
-
-        # Keep track of the shift amount
-        self.world_shift += shift_x
-
-        # Go through all the sprite lists and shift
-        for platform in self.platform_list:
-            platform.rect.x += shift_x
-
-        for enemy in self.enemy_list:
-            enemy.rect.x += shift_x
-
-        #function to kill and respawn all enemies upon death or restart
-    def respawnEnemies(self):
-        for enemy in self.enemy_list:
-            enemy.kill()
-
-        for i in range(0,len(self.enemy_to_spawn),2):
-            newEn = Enemy()
-            newEn.setPosition(self.enemy_to_spawn[i],self.enemy_to_spawn[i+1])
-            self.enemy_list.add(newEn)
+        self.counter += 1
 
 
 class Platform(pygame.sprite.Sprite):
