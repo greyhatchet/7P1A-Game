@@ -604,47 +604,62 @@ class Bullet(pg.sprite.Sprite):
             current_level_score += 100
 
 
-class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
-        # Create enemies
+class Level():
 
-        super().__init__()
+    def __init__(self, player):
 
-        width = 50
-        height = 50
-        self.image = pygame.Surface([width, height])
-        self.image.fill(RED)
+        # Constructor.
 
-        self.rect = self.image.get_rect()
+        self.platform_list = pygame.sprite.Group()
+        self.enemy_list = pygame.sprite.Group()
+        self.player = player
 
-        # set movement counter
-        self.counter = 0
+        # How far this world has been scrolled left/right
+        self.world_shift = 0
 
-        self.change_x = 0
-        self.change_y = 0
+        #local enemy list to add 
+        self.enemy_to_spawn = []
 
-    # Set the position of the enemy
-    def setPosition(self, x, y):
-        self.rect.left = x
-        self.rect.top = y
+    # Update everythign on this level
+    def update(self):
+        # Update everything in this level.
+        self.platform_list.update()
+        self.enemy_list.update()
 
-    def move(self):
-        # enemy movement, paces left and right
-        # distance sets how far
-        # speed sets how fast
-        distance = 100
-        speed = 2
+    def draw(self, screen):
+        # Draw everything on this level.
 
-        if self.counter >= 0 and self.counter <= distance:
-            self.rect.x += speed
-        elif self.counter >= distance and self.counter <= distance * 2:
-            self.rect.x -= speed
-        else:
-            self.counter = 0
+        # Draw the background
+        screen.fill(BLUE)
 
-        self.counter += 1
+        # Draw all the sprite lists that we have
+        self.platform_list.draw(screen)
+        self.enemy_list.draw(screen)
+        for enemy in self.enemy_list:
+            enemy.move()
+            self.player.collide(enemy, self.enemy_list)  # Checks if enemy is touching player
 
+    def shift_world(self, shift_x):
 
+        # Keep track of the shift amount
+        self.world_shift += shift_x
+
+        # Go through all the sprite lists and shift
+        for platform in self.platform_list:
+            platform.rect.x += shift_x
+
+        for enemy in self.enemy_list:
+            enemy.rect.x += shift_x
+
+        #function to kill and respawn all enemies upon death or restart
+    def respawnEnemies(self):
+        for enemy in self.enemy_list:
+            enemy.kill()
+
+        for i in range(0,len(self.enemy_to_spawn),2):
+            newEn = Enemy()
+            newEn.setPosition(self.enemy_to_spawn[i],self.enemy_to_spawn[i+1])
+            self.enemy_list.add(newEn)
 
 
 class Platform(pygame.sprite.Sprite):
@@ -676,6 +691,9 @@ class Level():
         # How far this world has been scrolled left/right
         self.world_shift = 0
 
+        #local enemy list to add 
+        self.enemy_to_spawn = []
+
     # Update everythign on this level
     def update(self):
         # Update everything in this level.
@@ -695,7 +713,6 @@ class Level():
             enemy.move()
             self.player.collide(enemy, self.enemy_list)  # Checks if enemy is touching player
 
-
     def shift_world(self, shift_x):
 
         # Keep track of the shift amount
@@ -708,6 +725,15 @@ class Level():
         for enemy in self.enemy_list:
             enemy.rect.x += shift_x
 
+        #function to kill and respawn all enemies upon death or restart
+    def respawnEnemies(self):
+        for enemy in self.enemy_list:
+            enemy.kill()
+
+        for i in range(0,len(self.enemy_to_spawn),2):
+            newEn = Enemy()
+            newEn.setPosition(self.enemy_to_spawn[i],self.enemy_to_spawn[i+1])
+            self.enemy_list.add(newEn)
 
 # Create platforms for the level
 class Level_00(Level):
@@ -724,7 +750,10 @@ class Level_00(Level):
         # spawn enemies
         enemy_1 = Enemy()
         enemy_1.setPosition(775, 400)
+        self.enemy_to_spawn.append(enemy_1.rect.x)
+        self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
+
 
         # Array with width, height, x, and y of platform
         level = [
@@ -770,9 +799,13 @@ class Level_01(Level):
         # spawn enemies
         enemy_1 = Enemy()
         enemy_1.setPosition(825, 300)
+        self.enemy_to_spawn.append(enemy_1.rect.x)
+        self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
         enemy_2 = Enemy()
         enemy_2.setPosition(700, 600)
+        self.enemy_to_spawn.append(enemy_2.rect.x)
+        self.enemy_to_spawn.append(enemy_2.rect.y)
         self.enemy_list.add(enemy_2)
 
         # Array with width, height, x, and y of platform
@@ -821,15 +854,23 @@ class Level_02(Level):
         # spawn enemies
         enemy_1 = Enemy()
         enemy_1.setPosition(1475, 290)
+        self.enemy_to_spawn.append(enemy_1.rect.x)
+        self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
         enemy_2 = Enemy()
         enemy_2.setPosition(1475, 450)
+        self.enemy_to_spawn.append(enemy_2.rect.x)
+        self.enemy_to_spawn.append(enemy_2.rect.y)
         self.enemy_list.add(enemy_2)
         enemy_3 = Enemy()
         enemy_3.setPosition(1475, 550)
+        self.enemy_to_spawn.append(enemy_3.rect.x)
+        self.enemy_to_spawn.append(enemy_3.rect.y)
         self.enemy_list.add(enemy_3)
         enemy_4 = Enemy()
         enemy_4.setPosition(1475, 650)
+        self.enemy_to_spawn.append(enemy_4.rect.x)
+        self.enemy_to_spawn.append(enemy_4.rect.y)
         self.enemy_list.add(enemy_4)
 
         # Array with width, height, x, and y of platform
@@ -874,15 +915,19 @@ class Level_03(Level):
         # spawn enemies
         '''enemy_1 = Enemy()
         enemy_1.setPosition(1475, 290)
+        self.enemy_to_spawn.append(enemy_1)
         self.enemy_list.add(enemy_1)
         enemy_2 = Enemy()
         enemy_2.setPosition(1475, 450)
+        self.enemy_to_spawn.append(enemy_2)
         self.enemy_list.add(enemy_2)
         enemy_3 = Enemy()
         enemy_3.setPosition(1475, 550)
+        self.enemy_to_spawn.append(enemy_3)
         self.enemy_list.add(enemy_3)
         enemy_4 = Enemy()
         enemy_4.setPosition(1475, 650)
+        self.enemy_to_spawn.append(enemy_4)
         self.enemy_list.add(enemy_4)'''
 
         # Array with width, height, x, and y of platform
@@ -928,15 +973,19 @@ class Level_04(Level):
         # spawn enemies
         enemy_1 = Enemy()
         enemy_1.setPosition(975, 600)
+        self.enemy_to_spawn.append(enemy_1)
         self.enemy_list.add(enemy_1)
         '''enemy_2 = Enemy()
         enemy_2.setPosition(1475, 450)
+        self.enemy_to_spawn.append(enemy_2)
         self.enemy_list.add(enemy_2)
         enemy_3 = Enemy()
         enemy_3.setPosition(1475, 550)
+        self.enemy_to_spawn.append(enemy_3)
         self.enemy_list.add(enemy_3)
         enemy_4 = Enemy()
         enemy_4.setPosition(1475, 650)
+        self.enemy_to_spawn.append(enemy_3)
         self.enemy_list.add(enemy_4)'''
 
         # Array with width, height, x, and y of platform
@@ -1124,6 +1173,7 @@ def gameLoop():
                     player.rect.x = 120
                     player.rect.y = 500  # SCREEN_HEIGHT - player.rect.height
                     bullet_list = pygame.sprite.Group()
+                    current_level.respawnEnemies()
 
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
