@@ -1040,6 +1040,7 @@ def gameLoop():
                     position_scroll = 0
                     player.rect.x = 120
                     player.rect.y = 500  # SCREEN_HEIGHT - player.rect.height
+                    bullet_list = pygame.sprite.Group()
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
