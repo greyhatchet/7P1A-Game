@@ -28,7 +28,7 @@ clock = pygame.time.Clock()
 current_level_no = 0
 total_score = 0.0
 current_level_score = 0.0
-lives_left = 0
+lives_left = 3
 enemies_killed = 0
 current_enemies_killed = 0
 save_info = {}
@@ -38,6 +38,7 @@ scores_list = []
 is_paused = False
 save_done = False
 load_done = False
+game_over = False
 
 # gameOn = True
 
@@ -90,6 +91,23 @@ def setSaveInfo():
     lives_left = int(save_info["lives_left"])
     total_score = save_info["total_score"]
     enemies_killed = int(save_info["enemies_killed"])
+
+
+# resetSaveInfo() is called when returning to start menu from game over screen
+def resetSaveInfo():
+    global current_level_no
+    global lives_left
+    global total_score
+    global current_level_score
+    global enemies_killed
+    global current_enmies_killed
+
+    current_level_no = 0
+    lives_left = 3
+    total_score = 0.0
+    current_level_score = 0.0
+    enemies_killed = 0
+    current_enemies_killed = 0
 
 
 def text_maker(text, font_a):
@@ -279,11 +297,58 @@ def scoreMenu():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-'''
-Code followed platformer tutorial from:
-http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
-'''
-# Global constants
+
+
+def gameOverDis():
+
+    global total_score
+    global current_level_score
+    global enemies_killed
+    global current_enemies_killed
+    global current_level_no
+
+    end_text = "YOU LOSE BITCH"
+    end_text_2 = "Press SPACE to return to Start"
+    end_text_3 = "Final score: " + str(int(total_score + current_level_score))
+    end_text_4 = "Enemies killed: " + str(enemies_killed + current_enemies_killed)
+    end_text_5 = "Level reached: " + str(current_level_no)
+    font_a = pygame.font.Font('freesansbold.ttf', 50)
+    tSurf1, tRec1 = text_maker(end_text, font_a)
+    tRec1.center = (500, 200)
+    tSurf2, tRec2 = text_maker(end_text_2, font_a)
+    tRec2.center = (500, 300)
+    tSurf3, tRec3 = text_maker(end_text_3, font_a)
+    tRec3.center = (500, 400)
+    tSurf4, tRec4 = text_maker(end_text_4, font_a)
+    tRec4.center = (500, 500)
+    tSurf5, tRec5 = text_maker(end_text_5, font_a)
+    tRec5.center = (500, 600)
+    gDisplay.blit(tSurf1, tRec1)
+    gDisplay.blit(tSurf2, tRec2)
+    gDisplay.blit(tSurf3, tRec3)
+    gDisplay.blit(tSurf4, tRec4)
+    gDisplay.blit(tSurf5, tRec5)
+    pygame.display.update()
+
+
+def gameOverMenu():
+
+    global total_score
+    global current_level_score
+    global enemies_killed
+    global current_enemies_killed
+    global game_over
+
+    gDisplay.blit(mBackg, (0, 0))
+    gameOverDis()
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            game_over = False
+            resetSaveInfo()
+            startMenu()
+
 
 # Colors
 BLACK = (0, 0, 0)
@@ -911,12 +976,13 @@ class Level_04(Level):
 def gameLoop():
     # Load required global variables
     global current_level_no
-    global is_paused
     global lives_left
     global enemies_killed
     global current_enemies_killed
     global total_score
     global current_level_score
+    global is_paused
+    global game_over
 
     # Create the player
     player = Player()
@@ -958,7 +1024,7 @@ def gameLoop():
 
     # -------- Main Program Loop -----------
     while not done:
-        if not is_paused:
+        if not is_paused and not game_over:
             # boolean to restart current level
             restart_level = False
             if mScreen:
@@ -1046,6 +1112,8 @@ def gameLoop():
                 lives_left -= 1
                 player.health = 3
                 restart_level = True
+                if lives_left <= 0:
+                    game_over = True
 
 
             # if r is pressed, return block to initial level position
@@ -1056,6 +1124,7 @@ def gameLoop():
                     player.rect.x = 120
                     player.rect.y = 500  # SCREEN_HEIGHT - player.rect.height
                     bullet_list = pygame.sprite.Group()
+
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
@@ -1118,6 +1187,9 @@ def gameLoop():
             player.stop()
             pauseMenu()
 
+        # If game_over, display game over menu
+        elif game_over == True:
+            gameOverMenu()
 
     pygame.quit()
     quit()
