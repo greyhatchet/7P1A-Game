@@ -970,7 +970,7 @@ def gameLoop():
                         Sentinel = 1
                         if look_forward == True:
                             pos = [player.rect.x + 40,
-                                   player.rect.y + 10]
+                                   player.rect.y + 30]
                             bullet = Bullet(pos)
                             bullet.vel = pg.math.Vector2(450, 0)
                             bullet.level = current_level
@@ -978,7 +978,7 @@ def gameLoop():
 
                         elif look_forward == False:
                             pos = [player.rect.x,
-                                   player.rect.y + 10]
+                                   player.rect.y + 30]
                             bullet = Bullet(pos)
                             bullet.vel = pg.math.Vector2(-450, 0)
                             bullet.level = current_level
