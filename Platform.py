@@ -372,6 +372,9 @@ class Player(pygame.sprite.Sprite):
         # What direction is the player facing?
         self.direction = "R"
 
+        # Player Health
+        self.health = 3
+
         # List of sprites we can bump against
         self.level = None
 
@@ -495,6 +498,7 @@ class Player(pygame.sprite.Sprite):
     def collide(self, enemy, enemy_list):
         if self.rect.colliderect(enemy.rect):  # Tests if the player is touching an enemy
             self.rect.x -= 50  # Pushes player to left if hit
+            self.health = self.health - 1
 
 
 class Bullet(pg.sprite.Sprite):
@@ -1022,6 +1026,12 @@ def gameLoop():
                 player.rect.left = 120
                 position_scroll -= diff
                 current_level.shift_world(diff)
+
+            # Player Death
+            if player.health == 0:
+                player.health = 3
+                restart_level = True
+
 
             # if r is pressed, return block to initial level position
             if restart_level == True:
