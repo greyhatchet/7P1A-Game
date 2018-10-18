@@ -727,7 +727,7 @@ class Level_00(Level):
         # Call the parent constructor
         Level.__init__(self, player)
 
-        self.level_limit = -1000
+        self.level_limit = -1400
         self.level_limit_back = 200
 
         # spawn enemies
@@ -776,7 +776,7 @@ class Level_01(Level):
         # Call the parent constructor
         Level.__init__(self, player)
 
-        self.level_limit = -1000
+        self.level_limit = -1300
         self.level_limit_back = 200
 
         # spawn enemies
@@ -831,7 +831,7 @@ class Level_02(Level):
         # Call the parent constructor
         Level.__init__(self, player)
 
-        self.level_limit = -1000
+        self.level_limit = -1500
         self.level_limit_back = 200
 
         # spawn enemies
@@ -892,7 +892,7 @@ class Level_03(Level):
         # Call the parent constructor
         Level.__init__(self, player)
 
-        self.level_limit = -1000
+        self.level_limit = -1400
         self.level_limit_back = 200
 
         # spawn enemies
@@ -950,13 +950,14 @@ class Level_04(Level):
         # Call the parent constructor
         Level.__init__(self, player)
 
-        self.level_limit = -1000
+        self.level_limit = -1400
         self.level_limit_back = 200
 
         # spawn enemies
         enemy_1 = Enemy()
         enemy_1.setPosition(975, 600)
-        self.enemy_to_spawn.append(enemy_1)
+        self.enemy_to_spawn.append(enemy_1.rect.x)
+        self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
         '''enemy_2 = Enemy()
         enemy_2.setPosition(1475, 450)
