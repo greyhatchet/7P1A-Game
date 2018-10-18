@@ -1140,14 +1140,16 @@ def gameLoop():
                 position_scroll -= diff
                 current_level.shift_world(diff)
 
-            # Player Death
-            if player.health == 0:
+            
+            # Player Death 
+            if player.health == 0 or player.rect.y >= 650:
                 lives_left -= 1
                 player.health = 3
                 restart_level = True
                 if lives_left <= 0:
                     game_over = True
 
+            
 
             # if r is pressed, return block to initial level position
             if restart_level == True:
@@ -1202,6 +1204,7 @@ def gameLoop():
                 message_to_screen('To quit: press q', BLACK, 0, -30, 16)
                 message_to_screen('To restart level: press r', BLACK, 0, -15, 16)
                 pygame.mixer.music.stop()
+                player.stop()
             else:
                 message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
                 message_to_screen("If stuck, press r to restart level", RED, -307, -275, 18)
