@@ -9,7 +9,6 @@ import time
 '''
 Code followed platformer tutorial from:
 http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
-
 Laser Sound from:
 https://www.youtube.com/watch?v=qdgwMnNMylg 
 '''
@@ -19,7 +18,7 @@ pygame.init()
 pygame.display.set_caption("Space Game")
 pygame.mixer.music.load('menuMusic.mp3')
 
-shoot_sfx = pygame.mixer.Sound('laser_shoot.wav') 
+#shoot_sfx = pygame.mixer.Sound('laser_shoot.wav')
 
 # load background
 mBackg = pygame.image.load('starsBG.png')
@@ -44,6 +43,7 @@ is_paused = False
 save_done = False
 load_done = False
 game_over = False
+
 
 # gameOn = True
 
@@ -167,7 +167,7 @@ def startMenu():
                     start = False
                     load = True
                     loadMenu()
-                elif event.key ==  pygame.K_s:
+                elif event.key == pygame.K_s:
                     start = False
                     scores = True
                     scoreMenu()
@@ -179,6 +179,7 @@ def startMenu():
         scoreMenu()
 
     pygame.display.update()
+
 
 def pauseDis():
     global save_done
@@ -205,7 +206,6 @@ def pauseDis():
 
 
 def pauseMenu():
-
     global is_paused
     global save_done
     global save_info
@@ -213,7 +213,7 @@ def pauseMenu():
     num_keys = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4,
                 pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 
-    gDisplay.blit(mBackg, (0,0))
+    gDisplay.blit(mBackg, (0, 0))
     pauseDis()
     pygame.display.update()
 
@@ -233,8 +233,8 @@ def pauseMenu():
             pygame.quit()
             quit()
 
-def loadDis():
 
+def loadDis():
     global load_done
 
     top_text = "Save loading menu"
@@ -263,14 +263,13 @@ def loadDis():
 
 
 def loadMenu():
-
     global save_num
     global save_info
     global load_done
     num_keys = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4,
                 pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 
-    gDisplay.blit(mBackg, (0,0))
+    gDisplay.blit(mBackg, (0, 0))
     loadDis()
     pygame.display.update()
 
@@ -288,8 +287,8 @@ def loadMenu():
             pygame.quit()
             quit()
 
-def scoreMenu():
 
+def scoreMenu():
     global scores_list
 
     gDisplay.blit(mBackg, (0, 0))
@@ -308,7 +307,6 @@ def scoreMenu():
 
 
 def gameOverDis():
-
     global total_score
     global current_level_score
     global enemies_killed
@@ -340,7 +338,6 @@ def gameOverDis():
 
 
 def gameOverMenu():
-
     global total_score
     global current_level_score
     global enemies_killed
@@ -360,7 +357,10 @@ def gameOverMenu():
             pygame.quit()
             quit()
 
-# Colors
+
+'''
+=========================================================Colors
+'''
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -602,7 +602,6 @@ class Bullet(pg.sprite.Sprite):
         if self.rect.right <= 0 or self.rect.left <= -20:
             self.kill()
 
-
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
             self.kill()
@@ -645,7 +644,7 @@ class Enemy(pygame.sprite.Sprite):
 
         # List of sprites we can bump against
         self.level = None
-        
+
         sprite_sheet = SpriteSheet("wizard idle.png")
         # Load all the right facing images into a list
         image = sprite_sheet.get_image(20, 12, 32, 55)
@@ -701,13 +700,13 @@ class Enemy(pygame.sprite.Sprite):
 
         self.counter += 1
 
-                # Move left/right
+        # Move left/right
         # self.rect.x += self.change_x
-        pos = self.rect.x 
+        pos = self.rect.x
         if self.direction == "R":
             frame = (pos // 30) % len(self.walking_frames_r)
             self.image = self.walking_frames_r[frame]
-        else: # need to include left direction of enemy
+        else:  # need to include left direction of enemy
             frame = (pos // 30) % len(self.walking_frames_l)
             self.image = self.walking_frames_l[frame]
 
@@ -741,7 +740,7 @@ class Level():
         # How far this world has been scrolled left/right
         self.world_shift = 0
 
-        #local enemy list to add 
+        # local enemy list to add
         self.enemy_to_spawn = []
 
     # Update everythign on this level
@@ -775,22 +774,23 @@ class Level():
         for enemy in self.enemy_list:
             enemy.rect.x += shift_x
 
-        #function to kill and respawn all enemies upon death or restart
+        # function to kill and respawn all enemies upon death or restart
+
     def respawnEnemies(self):
         for enemy in self.enemy_list:
             enemy.kill()
 
-        for i in range(0,len(self.enemy_to_spawn),2):
+        for i in range(0, len(self.enemy_to_spawn), 2):
             newEn = Enemy()
-            newEn.setPosition(self.enemy_to_spawn[i],self.enemy_to_spawn[i+1])
+            newEn.setPosition(self.enemy_to_spawn[i], self.enemy_to_spawn[i + 1])
             self.enemy_list.add(newEn)
+
 
 # Create platforms for the level
 class Level_00(Level):
     # Definition for level 0.
 
     def __init__(self, player):
-
         # Call the parent constructor
         Level.__init__(self, player)
 
@@ -804,12 +804,11 @@ class Level_00(Level):
         self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
 
-
         # Array with width, height, x, and y of platform
         level = [
-            [3000, 30, 0, -10], #roof
-            [30, 1000, 0, 0], # left blocking
-            [500, 30, 0, 670], #ground
+            [3000, 30, 0, -10],  # roof
+            [30, 1000, 0, 0],  # left blocking
+            [500, 30, 0, 670],  # ground
 
             [70, 70, 500, 650],  #
             [70, 70, 700, 550],  #
@@ -821,8 +820,11 @@ class Level_00(Level):
             [70, 70, 1000, 550],  #
             [210, 70, 1000, 600],  #
             [210, 70, 1120, 380],  #
+            [210, 30, 1400, 550],
+            [210, 30, 1650, 470],
+            [210, 30, 1800, 370],
 
-            [1500, 30, 1210, 670],  # #bottom
+            [2000, 30, 1210, 670],  # #bottom
         ]
 
         # Go through the array above and add platforms
@@ -839,7 +841,6 @@ class Level_01(Level):
     # Definition for level 2.
 
     def __init__(self, player):
-
         # Call the parent constructor
         Level.__init__(self, player)
 
@@ -861,25 +862,25 @@ class Level_01(Level):
         # Array with width, height, x, and y of platform
         level = [
             [3000, 30, 0, -10],  # roof
-            [30, 1000, 0, 0], #Left blocking
-            [500, 30, 0, 670], # beg ground
+            [30, 1000, 0, 0],  # Left blocking
+            [500, 30, 0, 670],  # beg ground
 
-            [30, 150, 500, 550], #A
-            [50, 30, 450, 550], #B
-            [150, 30, 250, 430], #C
+            [30, 150, 500, 550],  # A
+            [50, 30, 450, 550],  # B
+            [150, 30, 250, 430],  # C
 
-            [150, 30, 600, 350], #D
-            [150, 30, 850, 420], #E
-            [150, 30, 1000, 550], #F
-            [150, 30, 1120, 280], #G
+            [150, 30, 600, 350],  # D
+            [150, 30, 850, 420],  # E
+            [150, 30, 1000, 550],  # F
+            [150, 30, 1120, 280],  # G
 
-            [250, 30, 1300, 400], #H
-            [30, 150, 1550, 400], #I
-            [200, 30, 1550, 540], #J
-            [30, 150, 1750, 540], #K
+            [250, 30, 1300, 400],  # H
+            [30, 150, 1550, 400],  # I
+            [200, 30, 1550, 540],  # J
+            [30, 150, 1750, 540],  # K
 
-            [1000, 30, 1750, 670] # end ground
-                 ]
+            [2000, 30, 1750, 670]  # end ground
+        ]
 
         # Go through the array above and add platforms
         for platform in level:
@@ -889,12 +890,12 @@ class Level_01(Level):
             block.player = self.player
             self.platform_list.add(block)
 
+
 # Create platforms for the level
 class Level_02(Level):
     # Definition for level 2.
 
     def __init__(self, player):
-
         # Call the parent constructor
         Level.__init__(self, player)
 
@@ -926,21 +927,21 @@ class Level_02(Level):
         # Array with width, height, x, and y of platform
         level = [
             [3000, 30, 0, -10],  # roof
-            [30, 1000, 0, 0], #Left blocking
-            [500, 30, 0, 670], # beg ground
+            [30, 1000, 0, 0],  # Left blocking
+            [500, 30, 0, 670],  # beg ground
 
             [150, 30, 250, 550],  # A
             [30, 30, 500, 450],  # B
             [300, 30, 600, 350],  # C
             [250, 30, 870, 670],  # D
-            [200, 450, 1120, 550], # E
+            [200, 450, 1120, 550],  # E
 
             [150, 30, 1475, 400],  # F
             [150, 30, 1475, 250],  # G
-            [30, 300, 1750, 500], #H
+            [30, 300, 1750, 500],  # H
 
-            [1000, 30, 1750, 670]  # end ground
-            ]
+            [2000, 30, 1750, 670]  # end ground
+        ]
 
         # Go through the array above and add platforms
         for platform in level:
@@ -955,7 +956,6 @@ class Level_03(Level):
     # Definition for level 3.
 
     def __init__(self, player):
-
         # Call the parent constructor
         Level.__init__(self, player)
 
@@ -986,7 +986,7 @@ class Level_03(Level):
             [30, 1000, 0, 0],  # Left blocking
             [500, 30, 0, 670],  # beg ground
             [50, 30, 550, 550],  # A
-            [50, 30, 650, 450], #B
+            [50, 30, 650, 450],  # B
             [50, 30, 750, 350],  # C
             [50, 30, 850, 250],  # D
             [50, 30, 950, 150],  # E
@@ -998,8 +998,8 @@ class Level_03(Level):
             [50, 30, 1550, 350],  # K
             [50, 30, 1650, 450],  # L
             [30, 300, 1750, 500],  # M
-            [1000, 30, 1750, 670]  # end ground
-            ]
+            [2000, 30, 1750, 670]  # end ground
+        ]
 
         # Go through the array above and add platforms
         for platform in level:
@@ -1009,11 +1009,11 @@ class Level_03(Level):
             block.player = self.player
             self.platform_list.add(block)
 
+
 class Level_04(Level):
     # Definition for level 4.
 
     def __init__(self, player):
-
         # Call the parent constructor
         Level.__init__(self, player)
 
@@ -1043,18 +1043,18 @@ class Level_04(Level):
         level = [
             [3000, 30, 0, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
-            [2500, 30, 0, 670], # beg ground
+            [3000, 30, 0, 670],  # beg ground
 
             [30, 60, 300, 640],  # A
             [30, 90, 400, 610],  # B
-            [30, 120, 500, 580], # C
-            [30, 150, 600, 550], # D
-            [30, 180, 700, 520], # E
-            [30, 180, 800, 520], # F
-            [30, 150, 900, 550], #G
+            [30, 120, 500, 580],  # C
+            [30, 150, 600, 550],  # D
+            [30, 180, 700, 520],  # E
+            [30, 180, 800, 520],  # F
+            [30, 150, 900, 550],  # G
             # enemy
-            [30, 150, 1250, 550], #H
-            [30, 90, 1350, 610],  #I
+            [30, 150, 1250, 550],  # H
+            [30, 90, 1350, 610],  # I
 
             [50, 100, 1500, 600],  # J
             [50, 140, 1550, 560],  # K
@@ -1062,8 +1062,7 @@ class Level_04(Level):
             [50, 220, 1650, 480],  # M
             [50, 260, 1700, 440],  # N
 
-            ]
-
+        ]
 
         # Go through the array above and add platforms
         for platform in level:
@@ -1072,6 +1071,7 @@ class Level_04(Level):
             block.rect.y = platform[3]
             block.player = self.player
             self.platform_list.add(block)
+
 
 def gameLoop():
     # Load required global variables
@@ -1106,7 +1106,7 @@ def gameLoop():
     # set player position
     player.rect.x = 340
     position_scroll = 0
-    player.rect.y = 500 #SCREEN_HEIGHT - player.rect.height
+    player.rect.y = 500  # SCREEN_HEIGHT - player.rect.height
     active_sprite_list.add(player)
 
     # Loop until the user clicks the close button.
@@ -1147,7 +1147,7 @@ def gameLoop():
                     if event.key == pygame.K_UP or event.key == pygame.K_w:
                         player.jump()
                     if event.key == pygame.K_SPACE:
-                        shoot_sfx.play()
+                        #shoot_sfx.play()
                         Sentinel = 1
                         if look_forward == True:
                             pos = [player.rect.x + 40,
@@ -1178,7 +1178,6 @@ def gameLoop():
                         restart_level = True
                         mScreen = False
 
-
                 # interpret event of keys being released
                 if event.type == pygame.KEYUP:
                     if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and player.change_x < 0:
@@ -1208,8 +1207,7 @@ def gameLoop():
                 position_scroll -= diff
                 current_level.shift_world(diff)
 
-            
-            # Player Death 
+            # Player Death
             if player.health == 0 or player.rect.y >= 650:
                 lives_left -= 1
                 updateSaveInfo()
@@ -1217,8 +1215,6 @@ def gameLoop():
                 restart_level = True
                 if lives_left <= 0:
                     game_over = True
-
-            
 
             # if r is pressed, return block to initial level position
             if restart_level == True:
@@ -1229,7 +1225,6 @@ def gameLoop():
                     player.rect.y = 500  # SCREEN_HEIGHT - player.rect.height
                     bullet_list = pygame.sprite.Group()
                     current_level.respawnEnemies()
-
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
@@ -1253,7 +1248,7 @@ def gameLoop():
             '''
             print(current_level_no, 'Boo')
             print(current_position)
-    
+
             if current_position > current_level.level_limit_back and current_level_no != 0:
                 player.rect.x = 120
                 if current_level_no < len(level_list) - 1:
@@ -1271,8 +1266,8 @@ def gameLoop():
 
             if mScreen:
                 message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
-                message_to_screen('To quit: press q', BLACK, 0, -30, 16)
-                message_to_screen('To restart level: press r', BLACK, 0, -15, 16)
+                message_to_screen('To quit: press q', GREY, 0, -30, 16)
+                message_to_screen('To restart level: press r', GREY, 0, -15, 16)
                 pygame.mixer.music.stop()
                 player.stop()
             else:
@@ -1281,7 +1276,8 @@ def gameLoop():
                 message_to_screen("Press P to pause", RED, -368, -250, 18)
                 message_to_screen("Lives left: " + str(lives_left), RED, -390, -225, 18)
                 message_to_screen("Total score: " + str(int(total_score + current_level_score)), RED, -383, -200, 18)
-                message_to_screen("Enemies killed: " + str(enemies_killed + current_enemies_killed), RED, -366, -175, 18)
+                message_to_screen("Enemies killed: " + str(enemies_killed + current_enemies_killed), RED, -366, -175,
+                                  18)
             # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
             # Limit to 60 frames per second
