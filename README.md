@@ -1,4 +1,7 @@
 # 7P1A-Game
+
+Pygame is REQUIRED to run the game at all, please download the most recent version using pip.
+
 We are making an exploring game using python and pyGame. The game is a 2D side scroller that takes place in space. Some features will include the ability to move and jump and fight enemies. Potential extensions include animations for the player character and enemies, items and upgrades for the player characters and a boss at the end of the game.
 
 User entertainment mainly
