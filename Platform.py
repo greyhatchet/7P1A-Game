@@ -9,12 +9,17 @@ import time
 '''
 Code followed platformer tutorial from:
 http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
+
+Laser Sound from:
+https://www.youtube.com/watch?v=qdgwMnNMylg 
 '''
 # load music
 pygame.init()
 
 pygame.display.set_caption("Space Game")
 pygame.mixer.music.load('menuMusic.mp3')
+
+shoot_sfx = pygame.mixer.Sound('laser_shoot.wav') 
 
 # load background
 mBackg = pygame.image.load('starsBG.png')
@@ -1142,6 +1147,7 @@ def gameLoop():
                     if event.key == pygame.K_UP or event.key == pygame.K_w:
                         player.jump()
                     if event.key == pygame.K_SPACE:
+                        shoot_sfx.play()
                         Sentinel = 1
                         if look_forward == True:
                             pos = [player.rect.x + 40,
