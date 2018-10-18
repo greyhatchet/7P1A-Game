@@ -90,7 +90,7 @@ class EnemyTestCase(unittest.TestCase):
     def test_setPosition(self):
         self.enemy.setPosition(0,100)
         self.assertEqual(self.enemy.rect.left, 0)
-        self.assertEqual((self.enemy.rect.top, 100))
+        self.assertEqual(self.enemy.rect.top, 100)
 
 
 class PlatformTestCase(unittest.TestCase):
@@ -115,8 +115,78 @@ class LevelTestCase(unittest.TestCase):
         self.assertEqual(str(self.level.enemy_list), '<Group(0 sprites)>')
         self.assertEqual(self.level.world_shift, 0)
 
+    def test_shift_world(self):
+        self.level.shift_world(5)
+        self.assertEqual(self.level.world_shift, 5)
 
+class Level00TestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.player = Player()
+        self.level = Level_00(self.player)
+
+    def test_inits(self):
+        self.assertEqual(self.level.level_limit, -1400)
+        self.assertEqual(self.level.level_limit_back, 200)
+        self.assertEqual(str(self.level.enemy_list), '<Group(1 sprites)>')
+
+    def test_platforms(self):
+        self.assertEqual(str(self.level.platform_list), '<Group(12 sprites)>')
+
+class Level01TestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.player = Player()
+        self.level = Level_01(self.player)
+
+    def test_inits(self):
+        self.assertEqual(self.level.level_limit, -1300)
+        self.assertEqual(self.level.level_limit_back, 200)
+        self.assertEqual(str(self.level.enemy_list), '<Group(2 sprites)>')
+
+    def test_platforms(self):
+        self.assertEqual(str(self.level.platform_list), '<Group(15 sprites)>')
+
+class Level02TestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.player = Player()
+        self.level = Level_02(self.player)
+
+    def test_inits(self):
+        self.assertEqual(self.level.level_limit, -1500)
+        self.assertEqual(self.level.level_limit_back, 200)
+        self.assertEqual(str(self.level.enemy_list), '<Group(4 sprites)>')
+
+    def test_platforms(self):
+        self.assertEqual(str(self.level.platform_list), '<Group(12 sprites)>')
+
+class Level03TestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.player = Player()
+        self.level = Level_03(self.player)
+
+    def test_inits(self):
+        self.assertEqual(self.level.level_limit, -1400)
+        self.assertEqual(self.level.level_limit_back, 200)
+
+    def test_platforms(self):
+        self.assertEqual(str(self.level.platform_list), '<Group(17 sprites)>')
+
+class Level04TestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.player = Player()
+        self.level = Level_04(self.player)
+
+    def test_inits(self):
+        self.assertEqual(self.level.level_limit, -1400)
+        self.assertEqual(self.level.level_limit_back, 200)
+        self.assertEqual(str(self.level.enemy_list), '<Group(1 sprites)>')
+
+    def test_platforms(self):
+        self.assertEqual(str(self.level.platform_list), '<Group(17 sprites)>')
 
 
 if __name__ == '__main__':
