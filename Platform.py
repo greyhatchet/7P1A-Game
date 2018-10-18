@@ -348,7 +348,9 @@ def gameOverMenu():
             game_over = False
             resetSaveInfo()
             startMenu()
-
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            pygame.quit()
+            quit()
 
 # Colors
 BLACK = (0, 0, 0)
@@ -1062,7 +1064,6 @@ def gameLoop():
             restart_level = False
             if mScreen:
                 player.jump()
-            updateSaveInfo()
             for event in pygame.event.get():
 
                 # if window closed, quit
@@ -1144,6 +1145,7 @@ def gameLoop():
             # Player Death 
             if player.health == 0 or player.rect.y >= 650:
                 lives_left -= 1
+                updateSaveInfo()
                 player.health = 3
                 restart_level = True
                 if lives_left <= 0:
@@ -1177,6 +1179,7 @@ def gameLoop():
                     current_level_score = 0.0
                     enemies_killed += current_enemies_killed
                     current_enemies_killed = 0
+                    updateSaveInfo()
                 else:
                     mScreen = True
 
