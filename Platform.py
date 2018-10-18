@@ -279,6 +279,9 @@ def loadMenu():
                 gameLoop()
             if event.key in num_keys:
                 save_num = int(event.key) - 48
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
 
 def scoreMenu():
 
