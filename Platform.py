@@ -359,6 +359,7 @@ def gameOverMenu():
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
+GREY = (169, 169, 169)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
@@ -622,11 +623,55 @@ class Enemy(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-        # set movement counter
-        self.counter = 0
+        # Set a referance to the image rect.
+        self.rect = self.image.get_rect()
 
+        # Set speed vector of player
         self.change_x = 0
         self.change_y = 0
+
+        # This holds all the images for the animated walk left/right
+        # of our player
+        self.walking_frames_l = []
+        self.walking_frames_r = []
+
+        # What direction is the player facing?
+        self.direction = "R"
+
+        # List of sprites we can bump against
+        self.level = None
+        
+        sprite_sheet = SpriteSheet("wizard idle.png")
+        # Load all the right facing images into a list
+        image = sprite_sheet.get_image(20, 12, 32, 55)
+        self.walking_frames_r.append(image)
+        image = sprite_sheet.get_image(100, 12, 32, 55)
+        self.walking_frames_r.append(image)
+        image = sprite_sheet.get_image(180, 12, 32, 55)
+        self.walking_frames_r.append(image)
+        image = sprite_sheet.get_image(260, 12, 32, 55)
+        self.walking_frames_r.append(image)
+
+        # Load all the right facing images, then flip them
+        # to face left.
+        image = sprite_sheet.get_image(20, 12, 32, 55)
+        image = pygame.transform.flip(image, True, False)
+        self.walking_frames_l.append(image)
+        image = sprite_sheet.get_image(100, 12, 32, 55)
+        image = pygame.transform.flip(image, True, False)
+        self.walking_frames_l.append(image)
+        image = sprite_sheet.get_image(180, 12, 32, 55)
+        image = pygame.transform.flip(image, True, False)
+        self.walking_frames_l.append(image)
+        image = sprite_sheet.get_image(260, 12, 32, 55)
+        image = pygame.transform.flip(image, True, False)
+        self.walking_frames_l.append(image)
+
+        # Set the image the player starts with
+        self.image = self.walking_frames_r[0]
+
+        # set movement counter
+        self.counter = 0
 
     # Set the position of the enemy
     def setPosition(self, x, y):
@@ -641,13 +686,25 @@ class Enemy(pygame.sprite.Sprite):
         speed = 2
 
         if self.counter >= 0 and self.counter <= distance:
+            self.direction = "L"
             self.rect.x += speed
         elif self.counter >= distance and self.counter <= distance * 2:
+            self.direction = "R"
             self.rect.x -= speed
         else:
             self.counter = 0
 
         self.counter += 1
+
+                # Move left/right
+        # self.rect.x += self.change_x
+        pos = self.rect.x 
+        if self.direction == "R":
+            frame = (pos // 30) % len(self.walking_frames_r)
+            self.image = self.walking_frames_r[frame]
+        else: # need to include left direction of enemy
+            frame = (pos // 30) % len(self.walking_frames_l)
+            self.image = self.walking_frames_l[frame]
 
 
 class Platform(pygame.sprite.Sprite):
@@ -661,7 +718,7 @@ class Platform(pygame.sprite.Sprite):
         super().__init__()
 
         self.image = pygame.Surface([width, height])
-        self.image.fill(GREEN)
+        self.image.fill(GREY)
 
         self.rect = self.image.get_rect()
 
@@ -692,7 +749,7 @@ class Level():
         # Draw everything on this level.
 
         # Draw the background
-        screen.fill(BLUE)
+        screen.fill(BLACK)
 
         # Draw all the sprite lists that we have
         self.platform_list.draw(screen)
@@ -1037,6 +1094,7 @@ def gameLoop():
     current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
+    enemy_list = pygame.sprite.Group()
     bullet_list = pygame.sprite.Group()
     player.level = current_level
 
