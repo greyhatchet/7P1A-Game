@@ -737,6 +737,9 @@ class Level():
         self.enemy_list = pygame.sprite.Group()
         self.player = player
 
+        # Background image
+        self.background = None
+
         # How far this world has been scrolled left/right
         self.world_shift = 0
 
@@ -754,6 +757,7 @@ class Level():
 
         # Draw the background
         screen.fill(BLACK)
+        screen.blit(self.background, (0,0))
 
         # Draw all the sprite lists that we have
         self.platform_list.draw(screen)
@@ -793,6 +797,9 @@ class Level_00(Level):
     def __init__(self, player):
         # Call the parent constructor
         Level.__init__(self, player)
+
+        # Set the background
+        self.background = pygame.image.load("background-purple.png").convert()
 
         self.level_limit = -1400
         self.level_limit_back = 200
@@ -844,6 +851,9 @@ class Level_01(Level):
         # Call the parent constructor
         Level.__init__(self, player)
 
+        # Set the background
+        self.background = pygame.image.load("background-purple.png").convert()
+        
         self.level_limit = -1300
         self.level_limit_back = 200
 
@@ -898,6 +908,9 @@ class Level_02(Level):
     def __init__(self, player):
         # Call the parent constructor
         Level.__init__(self, player)
+
+        # Set the background
+        self.background = pygame.image.load("background-purple.png").convert()
 
         self.level_limit = -1500
         self.level_limit_back = 200
@@ -959,6 +972,9 @@ class Level_03(Level):
         # Call the parent constructor
         Level.__init__(self, player)
 
+        # Set the background
+        self.background = pygame.image.load("background-purple.png").convert()
+
         self.level_limit = -1400
         self.level_limit_back = 200
 
@@ -1016,6 +1032,9 @@ class Level_04(Level):
     def __init__(self, player):
         # Call the parent constructor
         Level.__init__(self, player)
+
+        # Set the background
+        self.background = pygame.image.load("background-purple.png").convert()
 
         self.level_limit = -1400
         self.level_limit_back = 200
