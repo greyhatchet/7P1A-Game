@@ -12,11 +12,11 @@ http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
 Laser Sound from:
 https://www.youtube.com/watch?v=qdgwMnNMylg 
 '''
-# load music
 pygame.init()
 
 pygame.display.set_caption("Space Game")
-pygame.mixer.music.load('menuMusic.mp3')
+
+
 
 #shoot_sfx = pygame.mixer.Sound('laser_shoot.wav')
 
@@ -140,7 +140,11 @@ def startDis():
 def startMenu():
     # display bkg
     gDisplay.blit(mBackg, (0, 0))
+
+    pygame.mixer.music.stop()
     # play music
+    # menuMusic attributed to: HorrorPen https://opengameart.org/users/horrorpen
+    pygame.mixer.music.load('menuMusic.mp3')
     pygame.mixer.music.play(-1)
 
     pygame.display.update()
@@ -313,6 +317,7 @@ def gameOverDis():
     global current_enemies_killed
     global current_level_no
 
+
     end_text = "YOU LOSE BITCH"
     end_text_2 = "Press SPACE to return to Start"
     end_text_3 = "Final score: " + str(int(total_score + current_level_score))
@@ -343,6 +348,8 @@ def gameOverMenu():
     global enemies_killed
     global current_enemies_killed
     global game_over
+
+
 
     gDisplay.blit(mBackg, (0, 0))
     gameOverDis()
@@ -1103,6 +1110,13 @@ def gameLoop():
     global is_paused
     global game_over
 
+    # load and play game music
+    # gameMusic attributed to: http://cynicmusic.com http://pixelsphere.org
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load('gameMusic.mp3')
+    pygame.mixer.music.play(-1)
+
+
     # Create the player
     player = Player()
 
@@ -1287,7 +1301,11 @@ def gameLoop():
                 message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
                 message_to_screen('To quit: press q', GREY, 0, -30, 16)
                 message_to_screen('To restart level: press r', GREY, 0, -15, 16)
-                pygame.mixer.music.stop()
+
+                # winMusic attributed to: p0ss https://opengameart.org/users/p0ss
+                #pygame.mixer.music.stop()
+                #pygame.mixer.music.load('winMusic.mp3')
+                #pygame.mixer.music.play(-1)
                 player.stop()
             else:
                 message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
@@ -1311,6 +1329,11 @@ def gameLoop():
 
         # If game_over, display game over menu
         elif game_over == True:
+            # gameOverMusic attributed to: t4ngr4m https://opengameart.org/users/t4ngr4m
+            #pygame.mixer.music.stop()
+            # play music
+            #pygame.mixer.music.load('gameOverMusic.mp3')
+            #pygame.mixer.music.play(-1)
             gameOverMenu()
 
     pygame.quit()
