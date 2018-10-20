@@ -318,7 +318,7 @@ def gameOverDis():
     global current_level_no
 
 
-    end_text = "YOU LOSE BITCH"
+    end_text = "Game Over"
     end_text_2 = "Press SPACE to return to Start"
     end_text_3 = "Final score: " + str(int(total_score + current_level_score))
     end_text_4 = "Enemies killed: " + str(enemies_killed + current_enemies_killed)
@@ -463,29 +463,29 @@ class Player(pygame.sprite.Sprite):
         # List of sprites we can bump against
         self.level = None
 
-        sprite_sheet = SpriteSheet("boy.png")
+        sprite_sheet = SpriteSheet("astronaut.png")
         # Load all the right facing images into a list
-        image = sprite_sheet.get_image(10, 5, 40, 50)
+        image = sprite_sheet.get_image(20, 3, 40, 50)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(75, 5, 40, 50)
+        image = sprite_sheet.get_image(80, 3, 40, 50)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(140, 5, 40, 50)
+        image = sprite_sheet.get_image(140, 3, 40, 50)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(205, 5, 40, 50)
+        image = sprite_sheet.get_image(200, 3, 40, 50)
         self.walking_frames_r.append(image)
 
         # Load all the right facing images, then flip them
         # to face left.
-        image = sprite_sheet.get_image(10, 5, 40, 50)
+        image = sprite_sheet.get_image(20, 3, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(75, 5, 40, 50)
+        image = sprite_sheet.get_image(80, 3, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(140, 5, 40, 50)
+        image = sprite_sheet.get_image(140, 3, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(205, 5, 40, 50)
+        image = sprite_sheet.get_image(200, 3, 40, 50)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
 
