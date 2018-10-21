@@ -297,7 +297,7 @@ def loadMenu():
             pygame.quit()
             quit()
 
-
+'''
 def scoreMenu():
     global scores_list
 
@@ -315,7 +315,7 @@ def scoreMenu():
             pygame.quit()
             quit()
 
-
+'''
 def gameOverDis():
     global total_score
     global current_level_score
@@ -1281,6 +1281,11 @@ def gameLoop():
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
+            total_score += current_level_score
+            current_level_score = 0.0
+            enemies_killed += current_enemies_killed
+            current_enemies_killed = 0
+
             if current_position < current_level.level_limit:
                 if current_level_no < len(level_list) - 1:
                     player.rect.x = 120
@@ -1289,14 +1294,10 @@ def gameLoop():
                     player.level = current_level
                     position_scroll = 0
                     bullet_list = pygame.sprite.Group()
-
-                    total_score += current_level_score
-                    current_level_score = 0.0
-                    enemies_killed += current_enemies_killed
-                    current_enemies_killed = 0
                     updateSaveInfo()
                 else:
                     mScreen = True
+                    updateSaveInfo()
                     if playsound == 0:
                         playsound = 1
 
