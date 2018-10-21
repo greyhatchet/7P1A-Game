@@ -20,8 +20,9 @@ pygame.init()
 pygame.display.set_caption("Space Game")
 
 
-
+game_over_sfx = pygame.mixer.Sound('you_lose.wav')
 shoot_sfx = pygame.mixer.Sound('laser.wav')
+hit_sfx = pygame.mixer.Sound('hit.wav')
 death_sfx = pygame.mixer.Sound('death.wav')
 
 # load background
@@ -589,6 +590,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.colliderect(enemy.rect):  # Tests if the player is touching an enemy
             self.rect.x -= 50  # Pushes player to left if hit
             self.health = self.health - 1
+            hit_sfx.play()
 
 
 class Bullet(pg.sprite.Sprite):
@@ -1261,7 +1263,9 @@ def gameLoop():
                 player.health = 3
                 restart_level = True
                 if lives_left <= 0:
+                    pygame.mixer.music.stop()
                     game_over = True
+                    game_over_sfx.play()
 
             # if r is pressed, return block to initial level position
             if restart_level == True:
@@ -1312,6 +1316,7 @@ def gameLoop():
                 bullet_list.draw(screen)
 
             if mScreen:
+                pygame.mixer.music.stop()
                 message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
                 message_to_screen('To quit: press q', GREY, 0, -30, 16)
                 message_to_screen('To restart level: press r', GREY, 0, -15, 16)
