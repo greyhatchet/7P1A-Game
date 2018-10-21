@@ -24,6 +24,7 @@ game_over_sfx = pygame.mixer.Sound('you_lose.wav')
 shoot_sfx = pygame.mixer.Sound('laser.wav')
 hit_sfx = pygame.mixer.Sound('hit.wav')
 death_sfx = pygame.mixer.Sound('death.wav')
+win_sfx = pygame.mixer.Sound('win_music.wav') 
 
 # load background
 mBackg = pygame.image.load('starsBG.png')
@@ -1130,6 +1131,7 @@ def gameLoop():
     pygame.mixer.music.stop()
     pygame.mixer.music.load('gameMusic.mp3')
     pygame.mixer.music.play(-1)
+    playsound = False
 
 
     # Create the player
@@ -1295,6 +1297,8 @@ def gameLoop():
                     updateSaveInfo()
                 else:
                     mScreen = True
+                    if playsound == 0:
+                        playsound = 1
 
             '''
             print(current_level_no, 'Boo')
@@ -1320,7 +1324,9 @@ def gameLoop():
                 message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
                 message_to_screen('To quit: press q', GREY, 0, -30, 16)
                 message_to_screen('To restart level: press r', GREY, 0, -15, 16)
-
+                if playsound == 1:
+                    win_sfx.play()
+                    playsound += 1
                 # winMusic attributed to: p0ss https://opengameart.org/users/p0ss
                 #pygame.mixer.music.stop()
                 #pygame.mixer.music.load('winMusic.mp3')
