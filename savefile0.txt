@@ -1,4 +1,4 @@
-total_score: 0.0
-enemies_killed: 0
-lives_left: 0
-game_level: 1
+total_score: 400.0
+game_level: 4
+lives_left: 2
+enemies_killed: 4
