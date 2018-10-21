@@ -19,8 +19,12 @@ pygame.init()
 
 pygame.display.set_caption("Space Game")
 
+
+game_over_sfx = pygame.mixer.Sound('you_lose.wav')
 shoot_sfx = pygame.mixer.Sound('laser.wav')
+hit_sfx = pygame.mixer.Sound('hit.wav')
 death_sfx = pygame.mixer.Sound('death.wav')
+win_sfx = pygame.mixer.Sound('win_music.wav') 
 
 # load background
 mBackg = pygame.image.load('starsBG.png')
@@ -40,12 +44,11 @@ current_enemies_killed = 0
 save_info = {}
 save_num = 0
 scores_path = "scoresfile.txt"
-scores_dict = {}
+scores_list = []
 is_paused = False
 save_done = False
 load_done = False
 game_over = False
-score_submit = False
 
 
 # gameOn = True
@@ -127,7 +130,6 @@ def startDis():
     text1 = 'Shape Wars: A Space Odyssey'
     text2 = 'Press ENTER to start'
     text3 = 'Press SPACE to choose load a save file'
-    text4 = 'Press S to view high scores'
     font_a = pygame.font.Font('freesansbold.ttf', 50)
     tSurf1, tRec1 = text_maker(text1, font_a)
     tRec1.center = (500, 200)
@@ -135,12 +137,9 @@ def startDis():
     tRec2.center = (500, 300)
     tSurf3, tRec3 = text_maker(text3, font_a)
     tRec3.center = (500, 400)
-    tSurf4, tRec4 = text_maker(text4, font_a)
-    tRec4.center = (500, 500)
     gDisplay.blit(tSurf1, tRec1)
     gDisplay.blit(tSurf2, tRec2)
     gDisplay.blit(tSurf3, tRec3)
-    gDisplay.blit(tSurf4, tRec4)
     pygame.display.update()
 
 
@@ -299,66 +298,13 @@ def loadMenu():
             quit()
 
 
-def scoreDis():
-
-    global scores_dict
-    names_list = list(scores_dict.keys())
-    scores_list = list(scores_dict.values())
-    scores_text = []
-
-    top_text = "High Scores"
-    for i in range(10):
-        try:
-            new_score_text = str(names_list[i]) + ": " + str(scores_list[i])
-        except(IndexError):
-            new_score_text = " : 0"
-        scores_text.append(new_score_text)
-    font_a = pygame.font.Font('freesansbold.ttf', 50)
-
-    tSurf0, tRec0 = text_maker(top_text, font_a)
-    tRec0.center = (500, 50)
-    tSurf1, tRec1 = text_maker(scores_text[0], font_a)
-    tRec1.center = (500, 120)
-    tSurf2, tRec2 = text_maker(scores_text[1], font_a)
-    tRec2.center = (500, 180)
-    tSurf3, tRec3 = text_maker(scores_text[2], font_a)
-    tRec3.center = (500, 240)
-    tSurf4, tRec4 = text_maker(scores_text[3], font_a)
-    tRec4.center = (500, 300)
-    tSurf5, tRec5 = text_maker(scores_text[4], font_a)
-    tRec5.center = (500, 360)
-    tSurf6, tRec6 = text_maker(scores_text[5], font_a)
-    tRec6.center = (500, 410)
-    tSurf7, tRec7 = text_maker(scores_text[6], font_a)
-    tRec7.center = (500, 470)
-    tSurf8, tRec8 = text_maker(scores_text[7], font_a)
-    tRec8.center = (500, 530)
-    tSurf9, tRec9 = text_maker(scores_text[8], font_a)
-    tRec9.center = (500, 590)
-    tSurf10, tRec10 = text_maker(scores_text[9], font_a)
-    tRec10.center = (500, 650)
-
-    gDisplay.blit(tSurf0, tRec0)
-    gDisplay.blit(tSurf1, tRec1)
-    gDisplay.blit(tSurf2, tRec2)
-    gDisplay.blit(tSurf3, tRec3)
-    gDisplay.blit(tSurf4, tRec4)
-    gDisplay.blit(tSurf5, tRec5)
-    gDisplay.blit(tSurf6, tRec6)
-    gDisplay.blit(tSurf7, tRec7)
-    gDisplay.blit(tSurf8, tRec8)
-    gDisplay.blit(tSurf9, tRec9)
-    gDisplay.blit(tSurf10, tRec10)
-    pygame.display.update()
-
-
 def scoreMenu():
-    global scores_dict
+    global scores_list
 
     gDisplay.blit(mBackg, (0, 0))
-    scores_dict = readScores(scores_path)
-    scoreDis()
     pygame.display.update()
+    scores_list = readScores(scores_path)
+    print(scores_list)
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -645,6 +591,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.colliderect(enemy.rect):  # Tests if the player is touching an enemy
             self.rect.x -= 50  # Pushes player to left if hit
             self.health = self.health - 1
+            hit_sfx.play()
 
 
 class Bullet(pg.sprite.Sprite):
@@ -1184,6 +1131,7 @@ def gameLoop():
     pygame.mixer.music.stop()
     pygame.mixer.music.load('gameMusic.mp3')
     pygame.mixer.music.play(-1)
+    playsound = False
 
 
     # Create the player
@@ -1279,8 +1227,6 @@ def gameLoop():
                     if event.key == pygame.K_r:
                         restart_level = True
                         mScreen = False
-                    if event.key == pygame.K_s:
-                        score_submit = True
 
                 # interpret event of keys being released
                 if event.type == pygame.KEYUP:
@@ -1319,7 +1265,9 @@ def gameLoop():
                 player.health = 3
                 restart_level = True
                 if lives_left <= 0:
+                    pygame.mixer.music.stop()
                     game_over = True
+                    game_over_sfx.play()
 
             # if r is pressed, return block to initial level position
             if restart_level == True:
@@ -1334,12 +1282,6 @@ def gameLoop():
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
             if current_position < current_level.level_limit:
-
-                total_score += current_level_score
-                current_level_score = 0.0
-                enemies_killed += current_enemies_killed
-                current_enemies_killed = 0
-
                 if current_level_no < len(level_list) - 1:
                     player.rect.x = 120
                     current_level_no += 1
@@ -1347,11 +1289,16 @@ def gameLoop():
                     player.level = current_level
                     position_scroll = 0
                     bullet_list = pygame.sprite.Group()
-                    updateSaveInfo()
 
-                else:
+                    total_score += current_level_score
+                    current_level_score = 0.0
+                    enemies_killed += current_enemies_killed
+                    current_enemies_killed = 0
                     updateSaveInfo()
+                else:
                     mScreen = True
+                    if playsound == 0:
+                        playsound = 1
 
             '''
             print(current_level_no, 'Boo')
@@ -1373,12 +1320,13 @@ def gameLoop():
                 bullet_list.draw(screen)
 
             if mScreen:
+                pygame.mixer.music.stop()
                 message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
-                message_to_screen("Your final score: " + str(int(total_score)), RED, 0, -30, 16)
-                message_to_screen('To quit: press q', GREY, 0, -15, 16)
-                message_to_screen('To restart level: press r', GREY, 0, 0, 16)
-                message_to_screen('To submit score: press s', GREY, 0, 15, 16)
-
+                message_to_screen('To quit: press q', GREY, 0, -30, 16)
+                message_to_screen('To restart level: press r', GREY, 0, -15, 16)
+                if playsound == 1:
+                    win_sfx.play()
+                    playsound += 1
                 # winMusic attributed to: p0ss https://opengameart.org/users/p0ss
                 #pygame.mixer.music.stop()
                 #pygame.mixer.music.load('winMusic.mp3')
