@@ -7,10 +7,13 @@ from scorewriter import *
 import time
 
 '''
-Code followed platformer tutorial from:
-http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
-Laser Sound from:
-https://www.youtube.com/watch?v=qdgwMnNMylg 
+Code followed platformer tutorial from: http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
+
+Laser Sound from: https://www.youtube.com/watch?v=qdgwMnNMylg 
+
+Death Sound from: https://www.youtube.com/watch?v=OZdIbJZdSZw
+
+Tile platform: https://karliszabers.itch.io/alienworld-tileset
 '''
 pygame.init()
 
@@ -18,7 +21,8 @@ pygame.display.set_caption("Space Game")
 
 
 
-#shoot_sfx = pygame.mixer.Sound('laser_shoot.wav')
+shoot_sfx = pygame.mixer.Sound('laser.wav')
+death_sfx = pygame.mixer.Sound('death.wav')
 
 # load background
 mBackg = pygame.image.load('starsBG.png')
@@ -374,6 +378,7 @@ GREEN = (0, 255, 0)
 GREY = (169, 169, 169)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+BROWN = (53,22,0)
 
 BULLET_IMG = pg.Surface((15, 9))
 BULLET_IMG.fill(pg.Color('aquamarine2'))
@@ -729,10 +734,12 @@ class Platform(pygame.sprite.Sprite):
         super().__init__()
 
         self.image = pygame.Surface([width, height])
-        self.image.fill(GREY)
+        self.image.fill(BROWN)
+
+        pltfrm = pygame.image.load('plt_tile.png')
 
         self.rect = self.image.get_rect()
-
+        self.image.blit(pltfrm, self.rect)
 
 class Level():
 
@@ -763,7 +770,7 @@ class Level():
         # Draw everything on this level.
 
         # Draw the background
-        screen.fill(BLACK)
+        screen.fill(BROWN)
         screen.blit(self.background, (0,0))
 
         # Draw all the sprite lists that we have
@@ -820,7 +827,8 @@ class Level_00(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [3000, 30, 0, -10],  # roof
+            [1500, 30, 0, -10],  # roof
+            [1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # left blocking
             [500, 30, 0, 670],  # ground
 
@@ -878,7 +886,8 @@ class Level_01(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [3000, 30, 0, -10],  # roof
+            [1500, 30, 0, -10],  # roof
+            [1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
             [500, 30, 0, 670],  # beg ground
 
@@ -946,7 +955,8 @@ class Level_02(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [3000, 30, 0, -10],  # roof
+            [1500, 30, 0, -10],  # roof
+            [1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
             [500, 30, 0, 670],  # beg ground
 
@@ -1005,7 +1015,8 @@ class Level_03(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [3000, 30, 0, -10],  # roof
+            [1500, 30, 0, -10],  # roof
+            [1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
             [500, 30, 0, 670],  # beg ground
             [50, 30, 550, 550],  # A
@@ -1067,9 +1078,11 @@ class Level_04(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [3000, 30, 0, -10],  # roof
+            [1500, 30, 0, -10],  # roof
+            [1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
-            [3000, 30, 0, 670],  # beg ground
+            [1500, 30, 0, 670],  # beg ground
+            [1500, 30, 1500, 670],  # beg ground
 
             [30, 60, 300, 640],  # A
             [30, 90, 400, 610],  # B
@@ -1180,7 +1193,7 @@ def gameLoop():
                     if event.key == pygame.K_UP or event.key == pygame.K_w:
                         player.jump()
                     if event.key == pygame.K_SPACE:
-                        #shoot_sfx.play()
+                        shoot_sfx.play()
                         Sentinel = 1
                         if look_forward == True:
                             pos = [player.rect.x + 40,
@@ -1242,6 +1255,7 @@ def gameLoop():
 
             # Player Death
             if player.health == 0 or player.rect.y >= 650:
+                death_sfx.play()
                 lives_left -= 1
                 updateSaveInfo()
                 player.health = 3
