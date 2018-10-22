@@ -364,6 +364,7 @@ def gameOverMenu():
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             game_over = False
+            pygame.mixer.stop()
             resetSaveInfo()
             startMenu()
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
@@ -763,6 +764,9 @@ class Level():
         # local enemy list to add
         self.enemy_to_spawn = []
 
+        #countdown timer for each level
+        self.level_time = 14
+
     # Update everythign on this level
     def update(self):
         # Update everything in this level.
@@ -1148,6 +1152,9 @@ def gameLoop():
     # Set the current level
     current_level = level_list[current_level_no]
 
+    #Start time of the level initialization
+    starting_time = pygame.time.get_ticks() 
+
     active_sprite_list = pygame.sprite.Group()
     enemy_list = pygame.sprite.Group()
     bullet_list = pygame.sprite.Group()
@@ -1168,6 +1175,8 @@ def gameLoop():
     look_forward = True
     dt = clock.tick(60) / 1000
 
+    #valuable booleans for restart and end game
+    endgame = False
     mScreen = False
 
     # Preliminarily update save info
@@ -1178,6 +1187,12 @@ def gameLoop():
         if not is_paused and not game_over:
             # boolean to restart current level
             restart_level = False
+
+            #current level time
+            current_time = (pygame.time.get_ticks()- starting_time)/ 1000
+            countdown_time = current_level.level_time - current_time
+
+
             if mScreen:
                 player.jump()
             for event in pygame.event.get():
@@ -1227,6 +1242,11 @@ def gameLoop():
                     if event.key == pygame.K_r:
                         restart_level = True
                         mScreen = False
+                        starting_time = pygame.time.get_ticks() 
+                        current_time = (pygame.time.get_ticks()- starting_time)/ 1000
+                        countdown_time = current_level.level_time - current_time
+                        pygame.mixer.music.play(-1)
+                        endgame = False
 
                 # interpret event of keys being released
                 if event.type == pygame.KEYUP:
@@ -1258,7 +1278,7 @@ def gameLoop():
                 current_level.shift_world(diff)
 
             # Player Death
-            if player.health == 0 or player.rect.y >= 650:
+            if player.health == 0 or player.rect.y >= 650 or (countdown_time < 0 and endgame == False):
                 death_sfx.play()
                 lives_left -= 1
                 updateSaveInfo()
@@ -1266,6 +1286,7 @@ def gameLoop():
                 restart_level = True
                 if lives_left <= 0:
                     pygame.mixer.music.stop()
+                    pygame.mixer.stop()
                     game_over = True
                     game_over_sfx.play()
 
@@ -1278,6 +1299,7 @@ def gameLoop():
                     player.rect.y = 500  # SCREEN_HEIGHT - player.rect.height
                     bullet_list = pygame.sprite.Group()
                     current_level.respawnEnemies()
+                    starting_time = pygame.time.get_ticks()
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
@@ -1295,9 +1317,12 @@ def gameLoop():
                     position_scroll = 0
                     bullet_list = pygame.sprite.Group()
                     updateSaveInfo()
+                    starting_time = pygame.time.get_ticks() 
                 else:
                     mScreen = True
                     updateSaveInfo()
+
+                    #make sure game over sound only plays once
                     if playsound == 0:
                         playsound = 1
 
@@ -1321,6 +1346,9 @@ def gameLoop():
                 bullet_list.draw(screen)
 
             if mScreen:
+                # stop looking for ways to kill character
+                endgame = True
+
                 pygame.mixer.music.stop()
                 message_to_screen("You win! Yuhhhhh", RED, 0, -50, 25)
                 message_to_screen('To quit: press q', GREY, 0, -30, 16)
@@ -1334,6 +1362,7 @@ def gameLoop():
                 #pygame.mixer.music.play(-1)
                 player.stop()
             else:
+                message_to_screen("Countdown: " + str(countdown_time)[:4], RED, -10, -225,30)
                 message_to_screen("Level " + str((current_level_no)), RED, -400, -300, 24)
                 message_to_screen("If stuck, press r to restart level", RED, -307, -275, 18)
                 message_to_screen("Press P to pause", RED, -368, -250, 18)
