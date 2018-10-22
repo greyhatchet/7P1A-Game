@@ -9,7 +9,7 @@ import time
 '''
 Code followed platformer tutorial from: http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
 
-Laser Sound from: https://www.youtube.com/watch?v=qdgwMnNMylg 
+Laser Sound from: https://www.youtube.com/watch?v=qdgwMnNMylg
 
 Death Sound from: https://www.youtube.com/watch?v=OZdIbJZdSZw
 
@@ -24,7 +24,7 @@ game_over_sfx = pygame.mixer.Sound('you_lose.wav')
 shoot_sfx = pygame.mixer.Sound('laser.wav')
 hit_sfx = pygame.mixer.Sound('hit.wav')
 death_sfx = pygame.mixer.Sound('death.wav')
-win_sfx = pygame.mixer.Sound('win_music.wav') 
+win_sfx = pygame.mixer.Sound('win_music.wav')
 
 # load background
 mBackg = pygame.image.load('starsBG.png')
@@ -229,8 +229,8 @@ def pauseMenu():
     pause_length = 0
     pause_time = pygame.time.get_ticks()
     while is_paused:
+        pauseDis()
         pause_length = (pygame.time.get_ticks() - pause_time) / 1000
-        print(pause_length)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
@@ -246,8 +246,9 @@ def pauseMenu():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
+    
     return pause_length
+
 
 def loadDis():
     global load_done
@@ -386,7 +387,7 @@ GREEN = (0, 255, 0)
 GREY = (169, 169, 169)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
-BROWN = (53,22,0)
+BROWN = (53, 22, 0)
 
 BULLET_IMG = pg.Surface((15, 9))
 BULLET_IMG.fill(pg.Color('aquamarine2'))
@@ -666,29 +667,44 @@ class Enemy(pygame.sprite.Sprite):
         # List of sprites we can bump against
         self.level = None
 
-        sprite_sheet = SpriteSheet("wizard idle.png")
+        sprite_sheet = SpriteSheet("alien.png")
         # Load all the right facing images into a list
-        image = sprite_sheet.get_image(20, 12, 32, 55)
+        image = sprite_sheet.get_image(0, 0, 45, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(100, 12, 32, 55)
+        image = sprite_sheet.get_image(45, 0, 45, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(180, 12, 32, 55)
+        image = sprite_sheet.get_image(90, 0, 45, 60)
         self.walking_frames_r.append(image)
-        image = sprite_sheet.get_image(260, 12, 32, 55)
+        image = sprite_sheet.get_image(135, 0, 45, 60)
+        self.walking_frames_r.append(image)
+        image = sprite_sheet.get_image(180, 0, 45, 60)
+        self.walking_frames_r.append(image)
+        image = sprite_sheet.get_image(225, 0, 45, 60)
+        self.walking_frames_r.append(image)
+        image = sprite_sheet.get_image(265, 0, 45, 60)
         self.walking_frames_r.append(image)
 
         # Load all the right facing images, then flip them
         # to face left.
-        image = sprite_sheet.get_image(20, 12, 32, 55)
+        image = sprite_sheet.get_image(0, 0, 45, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(100, 12, 32, 55)
+        image = sprite_sheet.get_image(45, 0, 45, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(180, 12, 32, 55)
+        image = sprite_sheet.get_image(90, 0, 45, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
-        image = sprite_sheet.get_image(260, 12, 32, 55)
+        image = sprite_sheet.get_image(135, 0, 45, 60)
+        image = pygame.transform.flip(image, True, False)
+        self.walking_frames_l.append(image)
+        image = sprite_sheet.get_image(180, 0, 45, 60)
+        image = pygame.transform.flip(image, True, False)
+        self.walking_frames_l.append(image)
+        image = sprite_sheet.get_image(225, 0, 45, 60)
+        image = pygame.transform.flip(image, True, False)
+        self.walking_frames_l.append(image)
+        image = sprite_sheet.get_image(265, 0, 45, 60)
         image = pygame.transform.flip(image, True, False)
         self.walking_frames_l.append(image)
 
@@ -711,10 +727,10 @@ class Enemy(pygame.sprite.Sprite):
         speed = 2
 
         if self.counter >= 0 and self.counter <= distance:
-            self.direction = "L"
+            self.direction = "R"
             self.rect.x += speed
         elif self.counter >= distance and self.counter <= distance * 2:
-            self.direction = "R"
+            self.direction = "L"
             self.rect.x -= speed
         else:
             self.counter = 0
@@ -744,9 +760,9 @@ class Platform(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([width, height])
         self.image.fill(BROWN)
-
+        
         pltfrm = pygame.image.load('plt_tile.png')
-
+        
         self.rect = self.image.get_rect()
         self.image.blit(pltfrm, self.rect)
 
@@ -832,15 +848,15 @@ class Level_00(Level):
 
         # spawn enemies
         enemy_1 = Enemy()
-        enemy_1.setPosition(775, 400)
+        enemy_1.setPosition(775, 440)
         self.enemy_to_spawn.append(enemy_1.rect.x)
         self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
 
         # Array with width, height, x, and y of platform
         level = [
-            [1500, 30, 0, -10],  # roof
-            [1500, 30, 1500, -10],  # roof
+        	[1500, 30, 0, -10],  # roof
+        	[1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # left blocking
             [500, 30, 0, 670],  # ground
 
@@ -886,20 +902,20 @@ class Level_01(Level):
 
         # spawn enemies
         enemy_1 = Enemy()
-        enemy_1.setPosition(825, 300)
+        enemy_1.setPosition(825, 360)
         self.enemy_to_spawn.append(enemy_1.rect.x)
         self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
         enemy_2 = Enemy()
-        enemy_2.setPosition(700, 600)
+        enemy_2.setPosition(700, 640)
         self.enemy_to_spawn.append(enemy_2.rect.x)
         self.enemy_to_spawn.append(enemy_2.rect.y)
         self.enemy_list.add(enemy_2)
 
         # Array with width, height, x, and y of platform
         level = [
-            [1500, 30, 0, -10],  # roof
-            [1500, 30, 1500, -10],  # roof
+        	[1500, 30, 0, -10],  # roof
+        	[1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
             [500, 30, 0, 670],  # beg ground
 
@@ -945,30 +961,30 @@ class Level_02(Level):
 
         # spawn enemies
         enemy_1 = Enemy()
-        enemy_1.setPosition(1475, 290)
+        enemy_1.setPosition(1395, 340)
         self.enemy_to_spawn.append(enemy_1.rect.x)
         self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
         enemy_2 = Enemy()
-        enemy_2.setPosition(1475, 450)
+        enemy_2.setPosition(1310, 640)
         self.enemy_to_spawn.append(enemy_2.rect.x)
         self.enemy_to_spawn.append(enemy_2.rect.y)
         self.enemy_list.add(enemy_2)
         enemy_3 = Enemy()
-        enemy_3.setPosition(1475, 550)
+        enemy_3.setPosition(1400, 640)
         self.enemy_to_spawn.append(enemy_3.rect.x)
         self.enemy_to_spawn.append(enemy_3.rect.y)
         self.enemy_list.add(enemy_3)
         enemy_4 = Enemy()
-        enemy_4.setPosition(1475, 650)
+        enemy_4.setPosition(1500, 640)
         self.enemy_to_spawn.append(enemy_4.rect.x)
         self.enemy_to_spawn.append(enemy_4.rect.y)
         self.enemy_list.add(enemy_4)
 
         # Array with width, height, x, and y of platform
         level = [
-            [1500, 30, 0, -10],  # roof
-            [1500, 30, 1500, -10],  # roof
+        	[1500, 30, 0, -10],  # roof
+        	[1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
             [500, 30, 0, 670],  # beg ground
 
@@ -1027,8 +1043,8 @@ class Level_03(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [1500, 30, 0, -10],  # roof
-            [1500, 30, 1500, -10],  # roof
+        	[1500, 30, 0, -10],  # roof
+        	[1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
             [500, 30, 0, 670],  # beg ground
             [50, 30, 550, 550],  # A
@@ -1071,7 +1087,7 @@ class Level_04(Level):
 
         # spawn enemies
         enemy_1 = Enemy()
-        enemy_1.setPosition(975, 600)
+        enemy_1.setPosition(975, 610)
         self.enemy_to_spawn.append(enemy_1.rect.x)
         self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
@@ -1090,11 +1106,11 @@ class Level_04(Level):
 
         # Array with width, height, x, and y of platform
         level = [
-            [1500, 30, 0, -10],  # roof
-            [1500, 30, 1500, -10],  # roof
+        	[1500, 30, 0, -10],  # roof
+        	[1500, 30, 1500, -10],  # roof
             [30, 1000, 0, 0],  # Left blocking
-            [1500, 30, 0, 670],  # beg ground
-            [1500, 30, 1500, 670],  # beg ground
+        	[1500, 30, 0, 670],  # beg ground
+        	[1500, 30, 1500, 670],  # beg ground
 
             [30, 60, 300, 640],  # A
             [30, 90, 400, 610],  # B
@@ -1157,8 +1173,8 @@ def gameLoop():
     # Set the current level
     current_level = level_list[current_level_no]
 
-    #Start time of the level initialization
-    starting_time = pygame.time.get_ticks() 
+    # Start time of the level initialization
+    starting_time = pygame.time.get_ticks()
 
     active_sprite_list = pygame.sprite.Group()
     enemy_list = pygame.sprite.Group()
@@ -1250,7 +1266,7 @@ def gameLoop():
                     if event.key == pygame.K_r:
                         restart_level = True
                         mScreen = False
-                        starting_time = pygame.time.get_ticks() 
+                        starting_time = pygame.time.get_ticks()
                         current_time = (pygame.time.get_ticks()- starting_time)/ 1000
                         countdown_time = current_level.level_time - current_time
                         pygame.mixer.music.play(-1)
@@ -1293,10 +1309,10 @@ def gameLoop():
                 player.health = 3
                 restart_level = True
                 if lives_left <= 0:
-                    pygame.mixer.music.stop()
-                    pygame.mixer.stop()
-                    game_over = True
-                    game_over_sfx.play()
+                	pygame.mixer.music.stop()
+                	pygame.mixer.stop()
+                	game_over = True
+                	game_over_sfx.play()
 
             # if r is pressed, return block to initial level position
             if restart_level == True:
@@ -1312,11 +1328,6 @@ def gameLoop():
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
-            total_score += current_level_score
-            current_level_score = 0.0
-            enemies_killed += current_enemies_killed
-            current_enemies_killed = 0
-
             if current_position < current_level.level_limit:
                 if current_level_no < len(level_list) - 1:
                     player.rect.x = 120
@@ -1326,13 +1337,13 @@ def gameLoop():
                     position_scroll = 0
                     bullet_list = pygame.sprite.Group()
                     updateSaveInfo()
-                    starting_time = pygame.time.get_ticks() 
+                    starting_time = pygame.time.get_ticks()
                     pause_length = 0
                 else:
                     mScreen = True
                     updateSaveInfo()
 
-                    #make sure game over sound only plays once
+                    # make sure game over sound only plays once
                     if playsound == 0:
                         playsound = 1
 
@@ -1388,7 +1399,7 @@ def gameLoop():
             # Go ahead and update the screen with what we've drawn.
             pygame.display.flip()
 
-        elif is_paused: 
+        elif is_paused:
             player.stop()
             pause_length += pauseMenu()
 
