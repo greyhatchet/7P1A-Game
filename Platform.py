@@ -226,28 +226,33 @@ def pauseMenu():
     gDisplay.blit(mBackg, (0, 0))
     pauseDis()
     pygame.display.update()
+    pause_length = 0
+    pause_time = pygame.time.get_ticks()
+    while is_paused:
+        pause_length = (pygame.time.get_ticks() - pause_time) / 1000
+        print(pause_length)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    save_done = False
+                    is_paused = not is_paused
+                elif event.key == pygame.K_s:
+                    writeSave(save_info, save_num)
+                    save_done = True
+                elif event.key in num_keys:
+                    save_num = int(event.key) - 48
+                    save_done = False
 
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_p:
-                save_done = False
-                is_paused = not is_paused
-            elif event.key == pygame.K_s:
-                writeSave(save_info, save_num)
-                save_done = True
-            elif event.key in num_keys:
-                save_num = int(event.key) - 48
-                save_done = False
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
 
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-
+    return pause_length
 
 def loadDis():
     global load_done
 
-    top_text = "Save loading menu"
+    top_text = " Select save location 0-9 "
     save_num_text = 'Current save file: ' + str(save_num)
     start_game_text = 'Press ENTER to start'
     load_save_text = 'Press SPACE to load selected save'
@@ -1178,6 +1183,7 @@ def gameLoop():
     #valuable booleans for restart and end game
     endgame = False
     mScreen = False
+    pause_length = 0
 
     # Preliminarily update save info
     updateSaveInfo()
@@ -1190,7 +1196,7 @@ def gameLoop():
 
             #current level time
             current_time = (pygame.time.get_ticks()- starting_time)/ 1000
-            countdown_time = current_level.level_time - current_time
+            countdown_time = current_level.level_time - current_time + pause_length
 
 
             if mScreen:
@@ -1234,6 +1240,8 @@ def gameLoop():
                         restart_level = True
                     if event.key == pygame.K_p:
                         is_paused = not is_paused
+                        pause_time = pygame.time.get_ticks()
+
 
                 # if at end game screen, press q to quit and r to restart level
                 elif event.type == pygame.KEYDOWN and mScreen == True:
@@ -1300,6 +1308,7 @@ def gameLoop():
                     bullet_list = pygame.sprite.Group()
                     current_level.respawnEnemies()
                     starting_time = pygame.time.get_ticks()
+                    pause_length = 0
 
             # If the player gets to the end of the level, go to the next level, if at end of last level, print you win
             current_position = player.rect.x + current_level.world_shift
@@ -1318,6 +1327,7 @@ def gameLoop():
                     bullet_list = pygame.sprite.Group()
                     updateSaveInfo()
                     starting_time = pygame.time.get_ticks() 
+                    pause_length = 0
                 else:
                     mScreen = True
                     updateSaveInfo()
@@ -1378,9 +1388,9 @@ def gameLoop():
             # Go ahead and update the screen with what we've drawn.
             pygame.display.flip()
 
-        elif is_paused:
+        elif is_paused: 
             player.stop()
-            pauseMenu()
+            pause_length += pauseMenu()
 
         # If game_over, display game over menu
         elif game_over == True:
