@@ -229,7 +229,9 @@ def pauseMenu():
     pause_length = 0
     pause_time = pygame.time.get_ticks()
     while is_paused:
+        gDisplay.blit(mBackg, (0, 0))
         pauseDis()
+        pygame.display.update()
         pause_length = (pygame.time.get_ticks() - pause_time) / 1000
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -296,6 +298,7 @@ def loadMenu():
                 setSaveInfo()
                 load_done = True
             if event.key == pygame.K_RETURN:
+                load_done = False
                 gameLoop()
             if event.key in num_keys:
                 save_num = int(event.key) - 48
