@@ -726,7 +726,7 @@ class Enemy(pygame.sprite.Sprite):
         # enemy movement, paces left and right
         # distance sets how far
         # speed sets how fast
-        distance = 100
+        distance = 70
         speed = 2
 
         if self.counter >= 0 and self.counter <= distance:
@@ -964,22 +964,22 @@ class Level_02(Level):
 
         # spawn enemies
         enemy_1 = Enemy()
-        enemy_1.setPosition(1395, 340)
+        enemy_1.setPosition(1450, 340)
         self.enemy_to_spawn.append(enemy_1.rect.x)
         self.enemy_to_spawn.append(enemy_1.rect.y)
         self.enemy_list.add(enemy_1)
         enemy_2 = Enemy()
-        enemy_2.setPosition(1310, 640)
+        enemy_2.setPosition(1305, 640)
         self.enemy_to_spawn.append(enemy_2.rect.x)
         self.enemy_to_spawn.append(enemy_2.rect.y)
         self.enemy_list.add(enemy_2)
         enemy_3 = Enemy()
-        enemy_3.setPosition(1400, 640)
+        enemy_3.setPosition(1435, 640)
         self.enemy_to_spawn.append(enemy_3.rect.x)
         self.enemy_to_spawn.append(enemy_3.rect.y)
         self.enemy_list.add(enemy_3)
         enemy_4 = Enemy()
-        enemy_4.setPosition(1500, 640)
+        enemy_4.setPosition(1560, 640)
         self.enemy_to_spawn.append(enemy_4.rect.x)
         self.enemy_to_spawn.append(enemy_4.rect.y)
         self.enemy_list.add(enemy_4)
